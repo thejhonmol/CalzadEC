@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Estilos personalizados -->
     <link rel="stylesheet" href="css/estilos.css">
+    <link rel="stylesheet" href="css/carousel.css">
     <style>
         .filter-grayscale {
             filter: grayscale(100%);
