@@ -18,6 +18,8 @@ CREATE TABLE IF NOT EXISTS usuarios (
     email VARCHAR(100) NOT NULL UNIQUE,
     telefono VARCHAR(10) NOT NULL,
     direccion VARCHAR(255) NOT NULL,
+    provincia VARCHAR(50) NOT NULL,
+    ciudad VARCHAR(50) NOT NULL,
     password VARCHAR(255) NOT NULL,
     rol ENUM('admin', 'cliente') NOT NULL DEFAULT 'cliente',
     fecha_registro DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -138,12 +140,12 @@ ALTER TABLE ventas_detalle ADD CONSTRAINT fk_detalle_promocion FOREIGN KEY (id_p
 -- =============================================
 
 -- Usuario administrador (Password: admin123)
-INSERT INTO usuarios (cedula, nombre_completo, email, telefono, direccion, password, rol) VALUES
-('1234567890', 'Administrador Sistema', 'admin@tiendacalzado.com', '0987654321', 'Riobamba, Ecuador', '$2y$10$ZSSBzrvQt4nRGsSAUb9aG.sWjd99FfcnJcQ0b5MQlybCpvIvWmB/K', 'admin');
+INSERT INTO usuarios (cedula, nombre_completo, email, telefono, direccion, provincia, ciudad, password, rol) VALUES
+('1234567890', 'Administrador Sistema', 'admin@tiendacalzado.com', '0987654321', 'Riobamba, Ecuador', 'Chimborazo', 'Riobamba', '$2y$10$ZSSBzrvQt4nRGsSAUb9aG.sWjd99FfcnJcQ0b5MQlybCpvIvWmB/K', 'admin');
 
 -- Cliente de prueba (Password: cliente123)
-INSERT INTO usuarios (cedula, nombre_completo, email, telefono, direccion, password, rol) VALUES
-('0987654321', 'Juan Pérez García', 'juan.perez@email.com', '0998765432', 'Av. Daniel León Borja, Riobamba', '$2y$10$klvm6IcIiqveYfjblfNF1OlHrhYcsCfsN4k5uLmCbWBfHvJJJErIu', 'cliente');
+INSERT INTO usuarios (cedula, nombre_completo, email, telefono, direccion, provincia, ciudad, password, rol) VALUES
+('0987654321', 'Juan Pérez García', 'juan.perez@email.com', '0998765432', 'Av. Daniel León Borja, Riobamba', 'Chimborazo', 'Riobamba', '$2y$10$klvm6IcIiqveYfjblfNF1OlHrhYcsCfsN4k5uLmCbWBfHvJJJErIu', 'cliente');
 
 -- Marcas
 INSERT INTO marcas (nombre_marca, descripcion) VALUES
