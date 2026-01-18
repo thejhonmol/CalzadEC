@@ -313,7 +313,7 @@ $usuario = $_SESSION['usuario'];
                                 <h5 class="card-title">${producto.nombre}</h5>
                                 <div class="mb-2">
                                     <span class="badge bg-primary me-1">${producto.genero}</span>
-                                    <span class="badge bg-secondary">${producto.tipo === 'deportivo' ? 'Deportivo' : 'Casual'}</span>
+                                    <span class="badge bg-secondary">${producto.tipo === 'deportivo' ? 'Deportivo' : 'No Deportivo'}</span>
                                     ${stockHTML}
                                 </div>
                                 <p class="text-muted mb-2"><i class="fas fa-ruler"></i> Talla: ${producto.talla}</p>
