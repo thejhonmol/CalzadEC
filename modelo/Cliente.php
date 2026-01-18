@@ -82,8 +82,8 @@ class Cliente {
             // Hash del password
             $passwordHash = password_hash($datos['password'], PASSWORD_BCRYPT);
             
-            $sql = "INSERT INTO usuarios (cedula, nombre_completo, email, telefono, direccion, password, rol) 
-                    VALUES (:cedula, :nombre, :email, :telefono, :direccion, :password, :rol)";
+            $sql = "INSERT INTO usuarios (cedula, nombre_completo, email, telefono, direccion, provincia, ciudad, password, rol) 
+                    VALUES (:cedula, :nombre, :email, :telefono, :direccion, :provincia, :ciudad, :password, :rol)";
             
             $stmt = $this->conexion->prepare($sql);
             $stmt->execute([
@@ -92,6 +92,8 @@ class Cliente {
                 ':email' => $datos['email'],
                 ':telefono' => $datos['telefono'],
                 ':direccion' => $datos['direccion'],
+                ':provincia' => $datos['provincia'],
+                ':ciudad' => $datos['ciudad'],
                 ':password' => $passwordHash,
                 ':rol' => $datos['rol'] ?? 'cliente'
             ]);
@@ -137,7 +139,7 @@ class Cliente {
      */
     public function obtenerTodos() {
         try {
-            $sql = "SELECT id_usuario, cedula, nombre_completo, email, telefono, direccion, rol, fecha_registro, estado 
+            $sql = "SELECT id_usuario, cedula, nombre_completo, email, telefono, direccion, provincia, ciudad, rol, fecha_registro, estado 
                     FROM usuarios 
                     WHERE estado = 'activo' 
                     ORDER BY fecha_registro DESC";
@@ -159,7 +161,7 @@ class Cliente {
      */
     public function obtenerPorId($id) {
         try {
-            $sql = "SELECT id_usuario, cedula, nombre_completo, email, telefono, direccion, rol, fecha_registro, estado 
+            $sql = "SELECT id_usuario, cedula, nombre_completo, email, telefono, direccion, provincia, ciudad, rol, fecha_registro, estado 
                     FROM usuarios 
                     WHERE id_usuario = :id";
             
@@ -205,7 +207,9 @@ class Cliente {
                     SET nombre_completo = :nombre,
                         email = :email,
                         telefono = :telefono,
-                        direccion = :direccion
+                        direccion = :direccion,
+                        provincia = :provincia,
+                        ciudad = :ciudad
                     WHERE id_usuario = :id";
             
             $stmt = $this->conexion->prepare($sql);
@@ -214,7 +218,9 @@ class Cliente {
                 ':nombre' => $datos['nombre_completo'],
                 ':email' => $datos['email'],
                 ':telefono' => $datos['telefono'],
-                ':direccion' => $datos['direccion']
+                ':direccion' => $datos['direccion'],
+                ':provincia' => $datos['provincia'],
+                ':ciudad' => $datos['ciudad']
             ]);
             
         } catch (PDOException $e) {

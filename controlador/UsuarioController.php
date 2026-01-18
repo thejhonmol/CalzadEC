@@ -49,10 +49,12 @@ class UsuarioController {
 
         $id = $_SESSION['usuario']['id_usuario'];
         $telefono = $_POST['telefono'] ?? '';
+        $provincia = $_POST['provincia'] ?? '';
+        $ciudad = $_POST['ciudad'] ?? '';
         $direccion = $_POST['direccion'] ?? '';
 
-        if (empty($telefono) || empty($direccion)) {
-            echo json_encode(['error' => 'Teléfono y dirección son obligatorios']);
+        if (empty($telefono) || empty($provincia) || empty($ciudad) || empty($direccion)) {
+            echo json_encode(['error' => 'Todos los campos son obligatorios']);
             return;
         }
 
@@ -65,12 +67,16 @@ class UsuarioController {
             'nombre_completo' => $usuarioActual['nombre_completo'],
             'email' => $usuarioActual['email'],
             'telefono' => $telefono,
+            'provincia' => $provincia,
+            'ciudad' => $ciudad,
             'direccion' => $direccion
         ];
 
         if ($this->modelo->actualizar($id, $datosNuevos)) {
             // Actualizar la sesión
             $_SESSION['usuario']['telefono'] = $telefono;
+            $_SESSION['usuario']['provincia'] = $provincia;
+            $_SESSION['usuario']['ciudad'] = $ciudad;
             $_SESSION['usuario']['direccion'] = $direccion;
             
             echo json_encode(['success' => true, 'mensaje' => 'Perfil actualizado correctamente']);

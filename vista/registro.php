@@ -18,6 +18,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nombre = trim($_POST['nombre_completo'] ?? '');
     $email = trim($_POST['email'] ?? '');
     $telefono = trim($_POST['telefono'] ?? '');
+    $provincia = trim($_POST['provincia'] ?? '');
+    $ciudad = trim($_POST['ciudad'] ?? '');
     $direccion = trim($_POST['direccion'] ?? '');
     $password = $_POST['password'] ?? '';
     $password_confirm = $_POST['password_confirm'] ?? '';
@@ -39,6 +41,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errores[] = "El teléfono debe tener 10 dígitos";
     }
     
+    if (empty($provincia)) {
+        $errores[] = "La provincia es requerida";
+    }
+    
+    if (empty($ciudad)) {
+        $errores[] = "La ciudad es requerida";
+    }
+
     if (empty($direccion)) {
         $errores[] = "La dirección es requerida";
     }
@@ -84,6 +94,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'email' => $email,
                 'telefono' => $telefono,
                 'direccion' => $direccion,
+                'provincia' => $provincia,
+                'ciudad' => $ciudad,
                 'password' => $password,
                 'rol' => 'cliente'
             ];
@@ -115,6 +127,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../css/estilos.css">
+    <script src="../js/ecuador-locations.js"></script>
 </head>
 <body class="bg-light">
     <div class="container py-5">
@@ -167,6 +180,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                        placeholder="10 dígitos" required
                                        value="<?php echo htmlspecialchars($_POST['telefono'] ?? ''); ?>">
                             </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">Provincia *</label>
+                                    <select class="form-select" name="provincia" id="provincia" required>
+                                        <!-- Se carga via JS -->
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">Ciudad *</label>
+                                    <select class="form-select" name="ciudad" id="ciudad" required>
+                                        <option value="">Seleccione una ciudad...</option>
+                                    </select>
+                                </div>
+                            </div>
                             
                             <div class="mb-3">
                                 <label class="form-label fw-bold">Dirección *</label>
@@ -218,6 +246,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        // Inicializar regiones
+        document.addEventListener('DOMContentLoaded', function() {
+            const provinciaSeleccionada = "<?php echo $_POST['provincia'] ?? ''; ?>";
+            const ciudadSeleccionada = "<?php echo $_POST['ciudad'] ?? ''; ?>";
+            cargarProvincias('provincia', 'ciudad', provinciaSeleccionada, ciudadSeleccionada);
+        });
+
         function validarPassword() {
             const password = document.getElementById('password').value;
             

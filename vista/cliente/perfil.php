@@ -19,6 +19,7 @@ $usuario = $_SESSION['usuario'];
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../../css/estilos.css">
+    <script src="../../js/ecuador-locations.js"></script>
 </head>
 <body>
     <!-- Navegación -->
@@ -88,28 +89,37 @@ $usuario = $_SESSION['usuario'];
                             </div>
 
                             <div class="mb-3">
-                                <label for="telefono" class="form-label fw-bold">Número de Celular</label>
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
-                                    <input type="tel" class="form-control editable-field" id="telefono" name="telefono" 
-                                           value="<?php echo htmlspecialchars($usuario['telefono']); ?>" disabled required>
+                                <label class="text-muted small d-block">Teléfono</label>
+                                <div id="view-telefono" class="fw-bold fs-5"><?php echo htmlspecialchars($_SESSION['usuario']['telefono']); ?></div>
+                                <input type="text" id="edit-telefono" class="form-control d-none" name="telefono" value="<?php echo htmlspecialchars($_SESSION['usuario']['telefono']); ?>">
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="text-muted small d-block">Provincia</label>
+                                    <div id="view-provincia" class="fw-bold fs-5"><?php echo htmlspecialchars($_SESSION['usuario']['provincia'] ?? 'No definida'); ?></div>
+                                    <select id="edit-provincia" class="form-select d-none" name="provincia"></select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="text-muted small d-block">Ciudad</label>
+                                    <div id="view-ciudad" class="fw-bold fs-5"><?php echo htmlspecialchars($_SESSION['usuario']['ciudad'] ?? 'No definida'); ?></div>
+                                    <select id="edit-ciudad" class="form-select d-none" name="ciudad">
+                                        <option value="">Seleccione una ciudad...</option>
+                                    </select>
                                 </div>
                             </div>
 
                             <div class="mb-4">
-                                <label for="direccion" class="form-label fw-bold">Dirección de Domicilio</label>
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
-                                    <textarea class="form-control editable-field" id="direccion" name="direccion" 
-                                              rows="3" disabled required><?php echo htmlspecialchars($usuario['direccion']); ?></textarea>
-                                </div>
+                                <label class="text-muted small d-block">Dirección</label>
+                                <div id="view-direccion" class="fw-bold fs-5"><?php echo htmlspecialchars($_SESSION['usuario']['direccion']); ?></div>
+                                <textarea id="edit-direccion" class="form-control d-none" name="direccion" rows="2"><?php echo htmlspecialchars($_SESSION['usuario']['direccion']); ?></textarea>
                             </div>
 
                             <div id="botones-edicion" class="d-none text-end">
                                 <button type="button" id="btn-cancelar" class="btn btn-secondary me-2">
                                     <i class="fas fa-times"></i> Cancelar
                                 </button>
-                                <button type="submit" class="btn btn-success">
+                                <button type="submit" id="btn-guardar" class="btn btn-success">
                                     <i class="fas fa-save"></i> Guardar Cambios
                                 </button>
                             </div>
@@ -136,31 +146,42 @@ $usuario = $_SESSION['usuario'];
             const form = document.getElementById('form-perfil');
             const btnEditar = document.getElementById('btn-editar');
             const btnCancelar = document.getElementById('btn-cancelar');
+            const btnGuardar = document.getElementById('btn-guardar');
             const botonesEdicion = document.getElementById('botones-edicion');
-            const camposEditables = document.querySelectorAll('.editable-field');
 
             btnEditar.addEventListener('click', function() {
-                camposEditables.forEach(campo => campo.disabled = false);
-                btnEditar.classList.add('d-none');
-                botonesEdicion.classList.remove('d-none');
-                camposEditables[0].focus();
+                $('#edit-telefono, #edit-provincia, #edit-ciudad, #edit-direccion').removeClass('d-none');
+                $('#view-telefono, #view-provincia, #view-ciudad, #view-direccion').addClass('d-none');
+                $(this).addClass('d-none');
+                $('#botones-edicion').removeClass('d-none');
+                
+                // Cargar localizaciones
+                cargarProvincias('edit-provincia', 'edit-ciudad', 
+                    "<?php echo $_SESSION['usuario']['provincia'] ?? ''; ?>", 
+                    "<?php echo $_SESSION['usuario']['ciudad'] ?? ''; ?>");
             });
 
             btnCancelar.addEventListener('click', function() {
-                camposEditables.forEach(campo => {
-                    campo.disabled = true;
-                    // Restaurar valores originales si se cancela
-                    if(campo.id === 'telefono') campo.value = "<?php echo $usuario['telefono']; ?>";
-                    if(campo.id === 'direccion') campo.value = `<?php echo addslashes($usuario['direccion']); ?>`;
-                });
-                btnEditar.classList.remove('d-none');
-                botonesEdicion.classList.add('d-none');
+                $('#edit-telefono, #edit-provincia, #edit-ciudad, #edit-direccion').addClass('d-none');
+                $('#view-telefono, #view-provincia, #view-ciudad, #view-direccion').removeClass('d-none');
+                $('#botones-edicion').addClass('d-none');
+                $('#btn-editar').removeClass('d-none');
+
+                // Restore original values
+                $('#edit-telefono').val("<?php echo htmlspecialchars($_SESSION['usuario']['telefono']); ?>");
+                $('#edit-direccion').val(`<?php echo addslashes(htmlspecialchars($_SESSION['usuario']['direccion'])); ?>`);
+                // For select fields, re-initialize or set selected option if needed
+                // For simplicity, we just hide them and let the next edit click re-populate
             });
 
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
                 
-                const formData = new FormData(form);
+                const formData = new FormData();
+                formData.append('telefono', $('#edit-telefono').val());
+                formData.append('provincia', $('#edit-provincia').val());
+                formData.append('ciudad', $('#edit-ciudad').val());
+                formData.append('direccion', $('#edit-direccion').val());
                 
                 fetch('../../controlador/UsuarioController.php?accion=actualizar', {
                     method: 'POST',
@@ -176,7 +197,16 @@ $usuario = $_SESSION['usuario'];
                             showConfirmButton: false,
                             timer: 1500
                         }).then(() => {
-                            location.reload();
+                            // Update displayed values
+                            $('#view-telefono').text($('#edit-telefono').val());
+                            $('#view-provincia').text($('#edit-provincia option:selected').text());
+                            $('#view-ciudad').text($('#edit-ciudad option:selected').text());
+                            $('#view-direccion').text($('#edit-direccion').val());
+                            
+                            // Simulate cancel click to switch back to view mode
+                            btnCancelar.click();
+                            // Reload to update session data and ensure consistency
+                            location.reload(); 
                         });
                     } else {
                         Swal.fire({
