@@ -149,6 +149,30 @@ class Producto {
     }
 
     /**
+     * Obtiene solo productos con promoción activa
+     * 
+     * @return array Lista de productos con descuento
+     */
+    public function obtenerConPromocion() {
+        try {
+            // Obtener todos los productos con promociones aplicadas
+            $productos = $this->obtenerTodos();
+            
+            // Filtrar solo los que tienen promoción activa
+            $productosConPromocion = array_filter($productos, function($p) {
+                return isset($p['tiene_promocion']) && $p['tiene_promocion'] === true && 
+                       isset($p['porcentaje_descuento']) && $p['porcentaje_descuento'] > 0;
+            });
+            
+            return array_values($productosConPromocion);
+            
+        } catch (Exception $e) {
+            error_log("Error al obtener productos con promoción: " . $e->getMessage());
+            return [];
+        }
+    }
+
+    /**
      * Aplica las promociones vigentes a una lista de productos en memoria
      * Esto evita duplicados por JOIN y asegura elegir el MEJOR descuento.
      */
