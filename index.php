@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -45,9 +46,20 @@
                     <li class="nav-item">
                         <a class="nav-link" href="vista/compartido/ayuda.php"><i class="fas fa-question-circle"></i> Ayuda</a>
                     </li>
+                    <?php if (!isset($_SESSION['usuario'])): ?>
                     <li class="nav-item">
                         <a class="nav-link" href="vista/login.php"><i class="fas fa-sign-in-alt"></i> Ingresar</a>
                     </li>
+                    <?php else: ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?php echo $_SESSION['usuario']['rol'] === 'admin' ? 'vista/admin/dashboard.php' : 'controlador/UsuarioController.php?accion=perfil'; ?>">
+                            <i class="fas fa-user"></i> Mi Perfil
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="controlador/UsuarioController.php?accion=logout"><i class="fas fa-sign-out-alt"></i> Salir</a>
+                    </li>
+                    <?php endif; ?>
                     <?php if(!isset($_SESSION['usuario']) || $_SESSION['usuario']['rol'] !== 'admin'): ?>
                     <li class="nav-item">
                         <a class="nav-link position-relative" href="vista/cliente/carrito.php">
@@ -68,7 +80,9 @@
             <p class="lead mb-4">El mejor calzado para toda la familia. Calidad, estilo y comodidad al mejor precio.</p>
             <div class="d-flex justify-content-center gap-3">
                 <a href="#productos" class="btn btn-light btn-lg"><i class="fas fa-shopping-bag"></i> Ver Productos</a>
+                <?php if (!isset($_SESSION['usuario'])): ?>
                 <a href="vista/login.php" class="btn btn-outline-light btn-lg"><i class="fas fa-user"></i> Crear Cuenta</a>
+                <?php endif; ?>
             </div>
         </div>
     </section>
@@ -421,9 +435,37 @@
                             </div>
                             <p class="text-muted mb-2"><i class="fas fa-ruler"></i> Talla: ${producto.talla}</p>
                             ${precioHTML}
-                            <a href="vista/login.php" class="btn btn-primary mt-auto">
+            let botonHTML;
+            if (window.usuarioRol === 'admin') {
+                botonHTML = `<button class="btn btn-secondary mt-auto" disabled title="Administradores no pueden comprar">
+                                <i class="fas fa-lock"></i> No disponible
+                            </button>`;
+            } else if (window.usuarioRol === 'cliente') {
+                botonHTML = `<button class="btn btn-primary mt-auto" onclick="carrito.agregarProducto(${JSON.stringify(producto).replace(/"/g, '&quot;')})">
+                                <i class="fas fa-cart-plus"></i> Agregar al Carrito
+                            </button>`;
+            } else {
+                botonHTML = `<a href="vista/login.php" class="btn btn-primary mt-auto">
                                 <i class="fas fa-shopping-cart"></i> Comprar
-                            </a>
+                            </a>`;
+            }
+            
+            return `
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card product-card h-100">
+                        <img src="${imagenUrl}" class="card-img-top product-img" 
+                             alt="${producto.nombre}"
+                             onerror="this.src='img/placeholder.svg'">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">${producto.nombre}</h5>
+                            <div class="mb-2">
+                                <span class="badge bg-primary me-1">${producto.genero}</span>
+                                <span class="badge bg-secondary">${producto.tipo === 'deportivo' ? 'Deportivo' : 'No Deportivo'}</span>
+                                ${stockHTML}
+                            </div>
+                            <p class="text-muted mb-2"><i class="fas fa-ruler"></i> Talla: ${producto.talla}</p>
+                            ${precioHTML}
+                            ${botonHTML}
                         </div>
                     </div>
                 </div>
