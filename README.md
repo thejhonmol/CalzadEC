@@ -1,78 +1,132 @@
-# CalzadEC - Tienda de Calzado
+# 🥾 CalzadEC - Sistema de Gestión de Tienda de Calzado
 
-Sistema de gestión de ventas de calzado desarrollado con arquitectura MVC en PHP.
+Sistema web completo para la gestión de una tienda de calzado, desarrollado con arquitectura **MVC en PHP** y **MySQL**.
 
-## 🚀 Despliegue en Railway
-
-### Paso 1: Subir a GitHub
-```bash
-cd c:/xampp/htdocs/grupal
-git init
-git add .
-git commit -m "Initial commit"
-git branch -M main
-git remote add origin https://github.com/TU_USUARIO/grupal.git
-git push -u origin main
-```
-
-### Paso 2: Crear Proyecto en Railway
-1. Ve a [railway.app](https://railway.app) y crea una cuenta
-2. Clic en **"New Project"**
-3. Selecciona **"Deploy from GitHub repo"**
-4. Conecta tu cuenta de GitHub y selecciona el repositorio
-
-### Paso 3: Agregar Base de Datos MySQL
-1. En tu proyecto Railway, clic en **"+ New"**
-2. Selecciona **"Database" → "MySQL"**
-3. Espera a que se aprovisione (1-2 minutos)
-
-### Paso 4: Conectar Variables
-Railway configura automáticamente las variables `MYSQLHOST`, `MYSQLPORT`, `MYSQLDATABASE`, `MYSQLUSER`, `MYSQLPASSWORD`.
-
-La aplicación las detectará automáticamente gracias a `config/conexion.php`.
-
-### Paso 5: Importar Base de Datos
-1. En Railway, clic en el servicio MySQL
-2. Ve a la pestaña **"Data"**
-3. Clic en **"Query"**
-4. Copia y pega el contenido de `database/schema.sql`
-5. Ejecuta el script
-
-### Paso 6: Generar Dominio
-1. Clic en tu servicio PHP
-2. Ve a **Settings → Networking**
-3. Clic en **"Generate Domain"**
-4. Tu app estará en `https://tu-proyecto.up.railway.app`
+![PHP](https://img.shields.io/badge/PHP-777BB4?style=flat&logo=php&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=flat&logo=mysql&logoColor=white)
+![Bootstrap](https://img.shields.io/badge/Bootstrap-7952B3?style=flat&logo=bootstrap&logoColor=white)
 
 ---
 
-## 💻 Desarrollo Local (XAMPP)
+## ✨ Características Principales
 
-1. Copia el proyecto a `C:/xampp/htdocs/grupal`
-2. Inicia Apache y MySQL desde XAMPP
-3. Importa `database/schema.sql` en phpMyAdmin
-4. Accede a `http://localhost/grupal`
+### 🛒 Para Clientes
+- Catálogo de productos con filtros por género, tipo y marca
+- **Carrusel de Ofertas Destacadas** con navegación interactiva
+- **Barra de promociones** con rotación automática cada 5 segundos
+- Carrito de compras persistente con cálculo en tiempo real
+- Historial de compras y facturas digitales
+- Gestión de perfil personal (teléfono, ubicación, dirección)
+
+### ⚙️ Para Administradores
+- Panel de control completo con acceso rápido desde navbar
+- Gestión CRUD de productos, marcas y promociones
+- Sistema de promociones segmentadas (por marca, género o tipo)
+- Reportes dinámicos con exportación a PDF
+- Control de inventario con alertas de stock bajo
+- Visualización de ventas y estadísticas
+
+### 🔐 Seguridad
+- Autenticación por roles (Admin/Cliente)
+- Validación de cédula ecuatoriana
+- Contraseñas hasheadas con bcrypt
+- Protección contra SQL injection (PDO prepared statements)
+
+---
+
+## 🚀 Instalación Rápida
+
+### Desarrollo Local (XAMPP)
+
+1. **Clonar el repositorio:**
+   ```bash
+   git clone https://github.com/thejhonmol/CalzadEC.git
+   cd CalzadEC
+   ```
+
+2. **Mover a XAMPP:**
+   ```bash
+   # Copiar a C:/xampp/htdocs/grupal
+   ```
+
+3. **Importar base de datos:**
+   - Abrir phpMyAdmin
+   - Importar `database/schema_railway.sql`
+
+4. **Acceder:**
+   - URL: `http://localhost/grupal`
 
 ### Credenciales de Prueba
-- **Admin:** admin@tiendacalzado.com / admin123
-- **Cliente:** juan.perez@email.com / cliente123
+| Rol | Email | Contraseña |
+|-----|-------|------------|
+| Admin | admin@tiendacalzado.com | admin123 |
+| Cliente | juan.perez@email.com | cliente123 |
+
+---
+
+## 🌐 Despliegue en Railway
+
+1. Subir repositorio a GitHub
+2. Crear proyecto en [railway.app](https://railway.app)
+3. Agregar servicio MySQL
+4. Importar `database/schema_railway.sql` en la pestaña Data → Query
+5. Generar dominio en Settings → Networking
+
+> Ver guía completa en [`docs/despliegue-railway.md`](docs/despliegue-railway.md)
 
 ---
 
 ## 📁 Estructura del Proyecto
 
 ```
-grupal/
-├── config/          # Configuración de base de datos
+CalzadEC/
+├── config/          # Configuración de BD
 ├── controlador/     # Controladores MVC
 ├── modelo/          # Modelos de datos
-├── vista/           # Vistas HTML/PHP
-│   ├── admin/       # Panel de administración
-│   └── cliente/     # Área de clientes
-├── css/             # Estilos
+├── vista/
+│   ├── admin/       # Panel administrativo
+│   ├── cliente/     # Área de clientes
+│   └── compartido/  # Vistas compartidas
+├── css/             # Estilos (estilos.css, carousel.css)
 ├── js/              # JavaScript
 ├── img/             # Imágenes
-├── database/        # Script SQL
+├── database/        # Scripts SQL
+├── docs/            # Documentación
 └── index.php        # Punto de entrada
 ```
-# CalzadEC
+
+---
+
+## 📚 Documentación
+
+| Documento | Descripción |
+|-----------|-------------|
+| [Objetivos](docs/objetivos.md) | Objetivos del proyecto |
+| [Resultados](docs/resultados.md) | Resultados obtenidos |
+| [Casos de Uso](docs/casos-de-uso.md) | Diagramas y flujos |
+| [Metodología](docs/metodologia.md) | Proceso de desarrollo |
+| [Instalación](docs/instalacion.md) | Guía detallada |
+| [Despliegue Railway](docs/despliegue-railway.md) | Deploy en la nube |
+| [Informe Final](docs/INFORME_FINAL.md) | Documento completo |
+
+---
+
+## 🛠️ Tecnologías
+
+- **Backend:** PHP 8.x, MySQL 8.x
+- **Frontend:** HTML5, CSS3, JavaScript ES6
+- **Frameworks:** Bootstrap 5.3, FontAwesome 6.4
+- **Librerías:** SweetAlert2, jsPDF
+- **Arquitectura:** MVC (Modelo-Vista-Controlador)
+
+---
+
+## 👥 Autores
+
+Proyecto desarrollado para el curso de Programación Web.
+
+---
+
+## 📄 Licencia
+
+Este proyecto es de uso académico.
