@@ -108,9 +108,10 @@ class Producto {
      * 
      * @param string $genero Género del calzado (hombre, mujer, niño) o null para todos
      * @param string $tipo Tipo de calzado (deportivo, no_deportivo) o null para todos
+     * @param int $marca ID de la marca o null para todas
      * @return array Lista de productos filtrados
      */
-    public function obtenerPorCategoria($genero = null, $tipo = null) {
+    public function obtenerPorCategoria($genero = null, $tipo = null, $marca = null) {
         try {
             $sql = "SELECT p.*, m.nombre_marca, pr.nombre AS nombre_promocion, pr.porcentaje_descuento,
                            ROUND(p.precio - (p.precio * IFNULL(pr.porcentaje_descuento, 0) / 100), 2) AS precio_final
@@ -131,6 +132,11 @@ class Producto {
             if ($tipo !== null) {
                 $sql .= " AND p.tipo = :tipo";
                 $params[':tipo'] = $tipo;
+            }
+            
+            if ($marca !== null) {
+                $sql .= " AND p.id_marca = :marca";
+                $params[':marca'] = $marca;
             }
             
             $sql .= " ORDER BY p.nombre ASC";

@@ -79,20 +79,26 @@
             <div class="filter-section">
                 <h4 class="mb-3"><i class="fas fa-filter"></i> Filtrar Productos</h4>
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <h6 class="text-muted mb-2">Por Género:</h6>
                         <button class="filter-btn active" data-filtro="genero" data-valor="">Todos</button>
                         <button class="filter-btn" data-filtro="genero" data-valor="hombre">Hombre</button>
                         <button class="filter-btn" data-filtro="genero" data-valor="mujer">Mujer</button>
                         <button class="filter-btn" data-filtro="genero" data-valor="niño">Niños</button>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <h6 class="text-muted mb-2">Por Tipo:</h6>
                         <button class="filter-btn active" data-filtro="tipo" data-valor="">Todos</button>
                         <button class="filter-btn" data-filtro="tipo" data-valor="deportivo">Deportivo</button>
                         <button class="filter-btn" data-filtro="tipo" data-valor="no_deportivo">No Deportivo</button>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
+                        <h6 class="text-muted mb-2">Por Marca:</h6>
+                        <select id="filtro-marca" class="form-select">
+                            <option value="">Todas las marcas</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
                         <h6 class="text-muted mb-2">Ordenar por:</h6>
                         <select id="filtro-ordenar" class="form-select">
                             <option value="">Sin ordenar</option>
@@ -223,10 +229,12 @@
         // Variables de filtro
         let filtroGenero = '';
         let filtroTipo = '';
+        let filtroMarca = '';
         let filtroOrdenar = '';
         
-        // Cargar productos al iniciar
+        // Cargar productos y marcas al iniciar
         document.addEventListener('DOMContentLoaded', function() {
+            cargarMarcas();
             cargarProductos();
             
             // Configurar filtros de botones
@@ -253,6 +261,12 @@
                     // Recargar productos
                     cargarProductos();
                 });
+            });
+            
+            // Configurar filtro de marca (dropdown)
+            document.getElementById('filtro-marca').addEventListener('change', function() {
+                filtroMarca = this.value;
+                cargarProductos();
             });
             
             // Configurar filtro de ordenamiento (dropdown)
@@ -292,6 +306,10 @@
                 url += `&tipo=${filtroTipo}`;
             }
             
+            if (filtroMarca) {
+                url += `&marca=${filtroMarca}`;
+            }
+            
             fetch(url)
                 .then(response => response.json())
                 .then(data => {
@@ -308,6 +326,23 @@
                         </div>
                     `;
                 });
+        }
+        
+        function cargarMarcas() {
+            fetch('controlador/MarcaController.php?accion=listar')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.marcas) {
+                        const select = document.getElementById('filtro-marca');
+                        data.marcas.forEach(marca => {
+                            const option = document.createElement('option');
+                            option.value = marca.id_marca;
+                            option.textContent = marca.nombre_marca;
+                            select.appendChild(option);
+                        });
+                    }
+                })
+                .catch(error => console.error('Error al cargar marcas:', error));
         }
     </script>
 </body>

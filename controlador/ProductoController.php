@@ -196,8 +196,9 @@ class ProductoController {
     private function filtrar() {
         $genero = $_GET['genero'] ?? null;
         $tipo = $_GET['tipo'] ?? null;
+        $marca = $_GET['marca'] ?? null;
         
-        $productos = $this->modelo->obtenerPorCategoria($genero, $tipo);
+        $productos = $this->modelo->obtenerPorCategoria($genero, $tipo, $marca);
         
         // Agregar información de promociones
         require_once __DIR__ . '/../modelo/Promocion.php';
