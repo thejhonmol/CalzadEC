@@ -57,18 +57,19 @@ class Producto {
      */
     public function obtenerTodos() {
         try {
-            $sql = "SELECT p.*, m.nombre_marca, pr.nombre AS nombre_promocion, pr.porcentaje_descuento,
-                           ROUND(p.precio - (p.precio * IFNULL(pr.porcentaje_descuento, 0) / 100), 2) AS precio_final
+            // 1. Obtener productos básicos con marca
+            $sql = "SELECT p.*, m.nombre_marca, p.precio as precio_original 
                     FROM productos p
                     LEFT JOIN marcas m ON p.id_marca = m.id_marca
-                    LEFT JOIN promociones pr ON p.promocion_id = pr.id_promocion 
-                        AND pr.activa = TRUE 
-                        AND CURRENT_DATE BETWEEN pr.fecha_inicio AND pr.fecha_fin
                     WHERE p.estado = 'activo'
                     ORDER BY p.fecha_creacion DESC";
             
             $stmt = $this->conexion->query($sql);
-            return $stmt->fetchAll();
+            $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            if (empty($productos)) return [];
+            
+            return $this->aplicarPromocionesLote($productos);
             
         } catch (PDOException $e) {
             error_log("Error al obtener productos: " . $e->getMessage());
@@ -84,30 +85,19 @@ class Producto {
      */
     public function obtenerPorId($id) {
         try {
-            $sql = "SELECT p.*, m.nombre_marca, 
-                           pr.nombre AS nombre_promocion, 
-                           pr.porcentaje_descuento,
-                           p.precio AS precio_original,
-                           CASE 
-                               WHEN pr.id_promocion IS NOT NULL THEN 1 
-                               ELSE 0 
-                           END AS tiene_promocion,
-                           ROUND(p.precio - (p.precio * IFNULL(pr.porcentaje_descuento, 0) / 100), 2) AS precio_final
+            $sql = "SELECT p.*, m.nombre_marca, p.precio as precio_original 
                     FROM productos p
                     LEFT JOIN marcas m ON p.id_marca = m.id_marca
-                    LEFT JOIN promociones pr ON pr.activa = TRUE 
-                        AND CURRENT_DATE BETWEEN pr.fecha_inicio AND pr.fecha_fin
-                        AND (
-                            pr.tipo_aplicacion = 'todos' OR
-                            (pr.tipo_aplicacion = 'marca' AND pr.id_marca = p.id_marca) OR
-                            (pr.tipo_aplicacion = 'genero' AND pr.genero = p.genero) OR
-                            (pr.tipo_aplicacion = 'tipo' AND pr.tipo = p.tipo)
-                        )
                     WHERE p.id_producto = :id";
             
             $stmt = $this->conexion->prepare($sql);
             $stmt->execute([':id' => $id]);
-            return $stmt->fetch();
+            $producto = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            if (!$producto) return false;
+            
+            $productos = $this->aplicarPromocionesLote([$producto]);
+            return $productos[0];
             
         } catch (PDOException $e) {
             error_log("Error al obtener producto: " . $e->getMessage());
@@ -117,33 +107,12 @@ class Producto {
     
     /**
      * Obtiene productos filtrados por categoría
-     * 
-     * @param string $genero Género del calzado (hombre, mujer, niño) o null para todos
-     * @param string $tipo Tipo de calzado (deportivo, no_deportivo) o null para todos
-     * @param int $marca ID de la marca o null para todas
-     * @return array Lista de productos filtrados
      */
     public function obtenerPorCategoria($genero = null, $tipo = null, $marca = null) {
         try {
-            $sql = "SELECT p.*, m.nombre_marca, 
-                           pr.nombre AS nombre_promocion, 
-                           pr.porcentaje_descuento,
-                           p.precio AS precio_original,
-                           CASE 
-                               WHEN pr.id_promocion IS NOT NULL THEN 1 
-                               ELSE 0 
-                           END AS tiene_promocion,
-                           ROUND(p.precio - (p.precio * IFNULL(pr.porcentaje_descuento, 0) / 100), 2) AS precio_final
+            $sql = "SELECT p.*, m.nombre_marca, p.precio as precio_original 
                     FROM productos p
                     LEFT JOIN marcas m ON p.id_marca = m.id_marca
-                    LEFT JOIN promociones pr ON pr.activa = TRUE 
-                        AND CURRENT_DATE BETWEEN pr.fecha_inicio AND pr.fecha_fin
-                        AND (
-                            pr.tipo_aplicacion = 'todos' OR
-                            (pr.tipo_aplicacion = 'marca' AND pr.id_marca = p.id_marca) OR
-                            (pr.tipo_aplicacion = 'genero' AND pr.genero = p.genero) OR
-                            (pr.tipo_aplicacion = 'tipo' AND pr.tipo = p.tipo)
-                        )
                     WHERE p.estado = 'activo'";
             
             $params = [];
@@ -167,11 +136,77 @@ class Producto {
             
             $stmt = $this->conexion->prepare($sql);
             $stmt->execute($params);
-            return $stmt->fetchAll();
+            $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            if (empty($productos)) return [];
+            
+            return $this->aplicarPromocionesLote($productos);
             
         } catch (PDOException $e) {
             error_log("Error al obtener productos por categoría: " . $e->getMessage());
             return [];
+        }
+    }
+
+    /**
+     * Aplica las promociones vigentes a una lista de productos en memoria
+     * Esto evita duplicados por JOIN y asegura elegir el MEJOR descuento.
+     */
+    private function aplicarPromocionesLote($productos) {
+        try {
+            // Obtener todas las promociones activas y vigentes
+            $sql = "SELECT * FROM promociones 
+                    WHERE activa = 1 
+                    AND CURRENT_DATE BETWEEN fecha_inicio AND fecha_fin
+                    ORDER BY porcentaje_descuento DESC";
+            $stmt = $this->conexion->query($sql);
+            $promociones = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            foreach ($productos as &$p) {
+                $mejorPromo = null;
+                $maxDescuento = 0;
+                
+                foreach ($promociones as $promo) {
+                    $aplica = false;
+                    
+                    switch ($promo['tipo_aplicacion']) {
+                        case 'todos':
+                            $aplica = true;
+                            break;
+                        case 'marca':
+                            $aplica = ($promo['id_marca'] == $p['id_marca']);
+                            break;
+                        case 'genero':
+                            $aplica = ($promo['genero'] == $p['genero']);
+                            break;
+                        case 'tipo':
+                            $aplica = ($promo['tipo'] == $p['tipo']);
+                            break;
+                    }
+                    
+                    if ($aplica && $promo['porcentaje_descuento'] > $maxDescuento) {
+                        $maxDescuento = $promo['porcentaje_descuento'];
+                        $mejorPromo = $promo;
+                    }
+                }
+                
+                if ($mejorPromo) {
+                    $p['tiene_promocion'] = 1;
+                    $p['nombre_promocion'] = $mejorPromo['nombre'];
+                    $p['porcentaje_descuento'] = $maxDescuento;
+                    $p['precio_final'] = round($p['precio'] * (1 - ($maxDescuento / 100)), 2);
+                } else {
+                    $p['tiene_promocion'] = 0;
+                    $p['nombre_promocion'] = null;
+                    $p['porcentaje_descuento'] = 0;
+                    $p['precio_final'] = $p['precio'];
+                }
+            }
+            
+            return $productos;
+        } catch (Exception $e) {
+            error_log("Error al aplicar promociones en lote: " . $e->getMessage());
+            return $productos;
         }
     }
     

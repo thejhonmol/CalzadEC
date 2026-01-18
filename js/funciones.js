@@ -130,7 +130,8 @@ class CarritoCompras {
             this.items.push({
                 id_producto: producto.id_producto,
                 nombre: producto.nombre,
-                precio: producto.precio_final || producto.precio,
+                precio_original: producto.precio_original || producto.precio,
+                precio_final: producto.precio_final || producto.precio,
                 imagen_url: producto.imagen_url,
                 cantidad: cantidad
             });
@@ -160,7 +161,7 @@ class CarritoCompras {
     }
 
     obtenerTotal() {
-        return this.items.reduce((total, item) => total + (item.precio * item.cantidad), 0);
+        return this.items.reduce((total, item) => total + ((item.precio_final || item.precio) * item.cantidad), 0);
     }
 
     obtenerCantidadTotal() {

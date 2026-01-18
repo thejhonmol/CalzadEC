@@ -55,30 +55,6 @@ class ProductoController {
      */
     private function listar() {
         $productos = $this->modelo->obtenerTodos();
-        
-        // Agregar información de promociones
-        require_once __DIR__ . '/../modelo/Promocion.php';
-        $promocionModelo = new Promocion();
-        
-        foreach ($productos as &$producto) {
-            $promocion = $promocionModelo->obtenerMejorPromocion($producto['id_producto']);
-            
-            if ($promocion) {
-                $producto['tiene_promocion'] = true;
-                $producto['porcentaje_descuento'] = $promocion['porcentaje_descuento'];
-                $producto['nombre_promocion'] = $promocion['nombre'];
-                
-                // Calcular precio final
-                $descuento = ($producto['precio'] * $promocion['porcentaje_descuento']) / 100;
-                $producto['precio_final'] = $producto['precio'] - $descuento;
-                $producto['precio_original'] = $producto['precio'];
-            } else {
-                $producto['tiene_promocion'] = false;
-                $producto['porcentaje_descuento'] = 0;
-                $producto['precio_final'] = $producto['precio'];
-            }
-        }
-        
         $this->responder(['productos' => $productos]);
     }
     
@@ -199,30 +175,6 @@ class ProductoController {
         $marca = $_GET['marca'] ?? null;
         
         $productos = $this->modelo->obtenerPorCategoria($genero, $tipo, $marca);
-        
-        // Agregar información de promociones
-        require_once __DIR__ . '/../modelo/Promocion.php';
-        $promocionModelo = new Promocion();
-        
-        foreach ($productos as &$producto) {
-            $promocion = $promocionModelo->obtenerMejorPromocion($producto['id_producto']);
-            
-            if ($promocion) {
-                $producto['tiene_promocion'] = true;
-                $producto['porcentaje_descuento'] = $promocion['porcentaje_descuento'];
-                $producto['nombre_promocion'] = $promocion['nombre'];
-                
-                // Calcular precio final
-                $descuento = ($producto['precio'] * $promocion['porcentaje_descuento']) / 100;
-                $producto['precio_final'] = $producto['precio'] - $descuento;
-                $producto['precio_original'] = $producto['precio'];
-            } else {
-                $producto['tiene_promocion'] = false;
-                $producto['porcentaje_descuento'] = 0;
-                $producto['precio_final'] = $producto['precio'];
-            }
-        }
-        
         $this->responder(['productos' => $productos]);
     }
     
