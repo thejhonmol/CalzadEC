@@ -1,0 +1,17 @@
+{
+    "name": "grupal/tienda-calzado",
+    "description": "Tienda de Calzado - Aplicación MVC PHP",
+    "type": "project",
+    "require": {
+        "php": ">=8.0",
+        "ext-pdo": "*",
+        "ext-pdo_mysql": "*"
+    },
+    "autoload": {
+        "classmap": [
+            "config/",
+            "modelo/",
+            "controlador/"
+        ]
+    }
+}
