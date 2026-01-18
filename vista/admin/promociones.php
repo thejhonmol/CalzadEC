@@ -28,6 +28,7 @@ if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['rol'] !== 'admin') {
                 <a class="nav-link" href="productos.php"><i class="fas fa-box"></i> Productos</a>
                 <a class="nav-link" href="marcas.php"><i class="fas fa-tags"></i> Marcas</a>
                 <a class="nav-link active" href="promociones.php"><i class="fas fa-percent"></i> Promociones</a>
+                <a class="nav-link" href="reportes.php"><i class="fas fa-chart-bar"></i> Reportes</a>
                 <a class="nav-link" href="../../index.php"><i class="fas fa-home"></i> Ver Sitio</a>
                 <a class="nav-link" href="../../controlador/AuthController.php?accion=logout"><i class="fas fa-sign-out-alt"></i> Salir</a>
             </div>
