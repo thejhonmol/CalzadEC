@@ -213,6 +213,34 @@
 
 ---
 
+## Caso de Uso 9: Interacción con Promociones Destacadas
+
+**Actor:** Cliente / Administrador  
+**Descripción:** Los usuarios interactúan con el sistema visual de promociones, incluyendo el carrusel de ofertas y la barra de promociones rotativa.
+
+**Flujo Principal (Cliente):**
+1. El usuario accede a la página de inicio o catálogo
+2. Visualiza la barra superior con la promoción activa actual
+3. La barra rota automáticamente cada 5 segundos mostrando diferentes promociones
+4. Explora la sección "Ofertas Destacadas" con productos en promoción
+5. Utiliza las flechas del carrusel para navegar entre productos
+6. Identifica productos en oferta por sus badges (porcentaje y nombre de promoción)
+7. Puede agregar productos al carrito directamente desde el carrusel
+
+**Flujo Alternativo (Administrador):**
+1. El administrador visualiza las mismas promociones
+2. Observa el botón "Panel Admin" visible únicamente para su rol
+3. Accede rápidamente al panel de administración desde cualquier página
+
+**Precondiciones:**
+- El sistema debe tener promociones activas configuradas
+
+**Postcondiciones:**
+- El usuario puede explorar y adquirir productos promocionados
+- El administrador tiene acceso rápido al panel de gestión
+
+---
+
 ## Diagrama de Casos de Uso
 
 ```

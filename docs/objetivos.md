@@ -27,3 +27,5 @@ Desarrollar una aplicación web con arquitectura Modelo-Vista-Controlador para l
 10. **Implementar un centro de autogestión de perfil** para clientes, permitiendo la actualización segura de sus datos de contacto, ubicación (provincia/ciudad) y dirección.
 
 11. **Preparar la aplicación para despliegue en servidor web**, asegurando la correcta configuración de la base de datos y archivos necesarios para su funcionamiento en producción.
+
+12. **Desarrollar un sistema visual de promociones destacadas** con carrusel horizontal interactivo, barra de promociones con rotación automática cada 5 segundos, y acceso rápido al panel administrativo desde la navegación principal.

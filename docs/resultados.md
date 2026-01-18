@@ -26,6 +26,8 @@
 8. **Centro de Autogestión de Perfil**
    - Se desarrolló un módulo de perfil para clientes que permite visualizar sus datos informativos y editar de forma segura su número de teléfono, ubicación (provincia y ciudad) y dirección de domicilio. El sistema actualiza automáticamente la sesión del usuario para reflejar los cambios de inmediato sin necesidad de re-autenticación.
 
+9. **Sistema Visual de Promociones Destacadas**
+   - Se implementó una experiencia de usuario enriquecida para promociones que incluye: una barra superior con **rotación automática cada 5 segundos** entre promociones activas, una sección "Ofertas Destacadas" con **carrusel horizontal interactivo** y flechas de navegación, badges con nombre de promoción y porcentaje de descuento en cada tarjeta de producto, y un botón de **acceso rápido al Panel Admin** visible únicamente para administradores en la barra de navegación.
 
 ## Características Técnicas Destacadas
 

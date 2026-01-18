@@ -46,6 +46,7 @@ Desarrollar una aplicación web con arquitectura Modelo-Vista-Controlador para l
 5. Diseñar un sistema de promociones flexible que permita descuentos por marca, categoría o género
 6. Implementar un carrito de compras interactivo con persistencia y cálculo automático de totales
 7. Crear una interfaz de usuario intuitiva y responsiva con sección de ayuda y gestión de perfil personalizada
+8. Desarrollar un sistema visual de promociones destacadas con carrusel horizontal, barra rotativa de ofertas, y acceso rápido al panel admin
 
 ## 4. METODOLOGÍA
 
