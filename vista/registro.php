@@ -43,8 +43,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errores[] = "La dirección es requerida";
     }
     
-    if (strlen($password) < 6) {
-        $errores[] = "La contraseña debe tener al menos 6 caracteres";
+    // Validación de contraseña segura
+    $passwordValida = true;
+    if (strlen($password) < 8) {
+        $errores[] = "La contraseña debe tener al menos 8 caracteres";
+        $passwordValida = false;
+    }
+    if (!preg_match('/[A-Z]/', $password)) {
+        $errores[] = "La contraseña debe contener al menos una letra mayúscula";
+        $passwordValida = false;
+    }
+    if (!preg_match('/[a-z]/', $password)) {
+        $errores[] = "La contraseña debe contener al menos una letra minúscula";
+        $passwordValida = false;
+    }
+    if (!preg_match('/[0-9]/', $password)) {
+        $errores[] = "La contraseña debe contener al menos un número";
+        $passwordValida = false;
+    }
+    if (!preg_match('/[!@#$%^&*(),.?":{}|<>]/', $password)) {
+        $errores[] = "La contraseña debe contener al menos un carácter especial (!@#$%^&*...)";
+        $passwordValida = false;
     }
     
     if ($password !== $password_confirm) {
@@ -157,14 +176,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             
                             <div class="mb-3">
                                 <label class="form-label fw-bold">Contraseña *</label>
-                                <input type="password" class="form-control" name="password"
-                                       placeholder="Mínimo 6 caracteres" required>
+                                <input type="password" class="form-control" name="password" id="password"
+                                       placeholder="Mínimo 8 caracteres" required oninput="validarPassword()">
+                                <div id="password-requisitos" class="mt-2">
+                                    <small class="d-block" id="req-longitud"><i class="fas fa-times text-danger"></i> Mínimo 8 caracteres</small>
+                                    <small class="d-block" id="req-mayuscula"><i class="fas fa-times text-danger"></i> Al menos una mayúscula (A-Z)</small>
+                                    <small class="d-block" id="req-minuscula"><i class="fas fa-times text-danger"></i> Al menos una minúscula (a-z)</small>
+                                    <small class="d-block" id="req-numero"><i class="fas fa-times text-danger"></i> Al menos un número (0-9)</small>
+                                    <small class="d-block" id="req-especial"><i class="fas fa-times text-danger"></i> Al menos un carácter especial (!@#$%&*)</small>
+                                </div>
                             </div>
                             
                             <div class="mb-4">
                                 <label class="form-label fw-bold">Confirmar Contraseña *</label>
-                                <input type="password" class="form-control" name="password_confirm"
-                                       placeholder="Repita su contraseña" required>
+                                <input type="password" class="form-control" name="password_confirm" id="password_confirm"
+                                       placeholder="Repita su contraseña" required oninput="validarConfirmacion()">
+                                <small id="password-match" class="d-none"><i class="fas fa-times text-danger"></i> Las contraseñas no coinciden</small>
                             </div>
                             
                             <button type="submit" class="btn btn-success w-100 btn-lg mb-3">
@@ -190,5 +217,55 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function validarPassword() {
+            const password = document.getElementById('password').value;
+            
+            // Longitud
+            actualizarRequisito('req-longitud', password.length >= 8);
+            // Mayúscula
+            actualizarRequisito('req-mayuscula', /[A-Z]/.test(password));
+            // Minúscula
+            actualizarRequisito('req-minuscula', /[a-z]/.test(password));
+            // Número
+            actualizarRequisito('req-numero', /[0-9]/.test(password));
+            // Especial
+            actualizarRequisito('req-especial', /[!@#$%^&*(),.?":{}|<>]/.test(password));
+            
+            validarConfirmacion();
+        }
+        
+        function actualizarRequisito(id, cumple) {
+            const elemento = document.getElementById(id);
+            const icono = elemento.querySelector('i');
+            
+            if (cumple) {
+                icono.classList.remove('fa-times', 'text-danger');
+                icono.classList.add('fa-check', 'text-success');
+                elemento.classList.add('text-success');
+                elemento.classList.remove('text-muted');
+            } else {
+                icono.classList.remove('fa-check', 'text-success');
+                icono.classList.add('fa-times', 'text-danger');
+                elemento.classList.remove('text-success');
+            }
+        }
+        
+        function validarConfirmacion() {
+            const password = document.getElementById('password').value;
+            const confirm = document.getElementById('password_confirm').value;
+            const mensaje = document.getElementById('password-match');
+            
+            if (confirm.length > 0) {
+                if (password === confirm) {
+                    mensaje.classList.add('d-none');
+                } else {
+                    mensaje.classList.remove('d-none');
+                }
+            } else {
+                mensaje.classList.add('d-none');
+            }
+        }
+    </script>
 </body>
 </html>
