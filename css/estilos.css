@@ -573,6 +573,10 @@ body {
     animation: slideDown 0.4s ease-out;
 }
 
+.promo-bar span {
+    transition: opacity 0.3s ease-in-out;
+}
+
 @keyframes slideDown {
     from {
         transform: translateY(-100%);

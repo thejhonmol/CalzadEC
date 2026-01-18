@@ -317,19 +317,48 @@
             cargarPromociones();
         });
 
-        // Cargar promociones activas
+        // Cargar promociones activas con rotación automática
+        let promocionesActivas = [];
+        let indicePromocionActual = 0;
+        let intervaloPromocion = null;
+
         function cargarPromociones() {
             fetch('controlador/PromocionController.php?accion=activas')
                 .then(response => response.json())
                 .then(data => {
                     if (data.promociones && data.promociones.length > 0) {
-                        const promo = data.promociones[0];
-                        document.getElementById('promo-bar-text').innerHTML = 
-                            `🔥 <strong>${promo.nombre}:</strong> ${promo.descripcion} - ¡Hasta ${parseFloat(promo.porcentaje_descuento).toFixed(0)}% de descuento!`;
+                        promocionesActivas = data.promociones;
                         document.getElementById('promo-bar-container').classList.remove('d-none');
+                        
+                        // Mostrar primera promoción
+                        mostrarPromocion(0);
+                        
+                        // Si hay más de una promoción, iniciar rotación automática
+                        if (promocionesActivas.length > 1) {
+                            intervaloPromocion = setInterval(rotarPromocion, 5000);
+                        }
                     }
                 })
                 .catch(error => console.error('Error al cargar promociones:', error));
+        }
+
+        function mostrarPromocion(indice) {
+            const promo = promocionesActivas[indice];
+            const promoText = document.getElementById('promo-bar-text');
+            
+            // Añadir animación de fade
+            promoText.style.opacity = '0';
+            
+            setTimeout(() => {
+                promoText.innerHTML = 
+                    `🔥 <strong>${promo.nombre}:</strong> ${promo.descripcion} - ¡Hasta ${parseFloat(promo.porcentaje_descuento).toFixed(0)}% de descuento!`;
+                promoText.style.opacity = '1';
+            }, 300);
+        }
+
+        function rotarPromocion() {
+            indicePromocionActual = (indicePromocionActual + 1) % promocionesActivas.length;
+            mostrarPromocion(indicePromocionActual);
         }
         
         function ordenarProductos(productos) {
