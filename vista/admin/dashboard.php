@@ -32,7 +32,7 @@ $usuario = $_SESSION['usuario'];
                 <a class="nav-link" href="marcas.php"><i class="fas fa-tags"></i> Marcas</a>
                 <a class="nav-link" href="promociones.php"><i class="fas fa-percent"></i> Promociones</a>
                 <a class="nav-link" href="../../index.php"><i class="fas fa-home"></i> Ver Sitio</a>
-                <a class="nav-link" href="#" onclick="cerrarSesion()"><i class="fas fa-sign-out-alt"></i> Salir</a>
+                <a class="nav-link" href="../../controlador/AuthController.php?accion=logout"><i class="fas fa-sign-out-alt"></i> Salir</a>
             </div>
         </div>
     </nav>
@@ -191,13 +191,8 @@ $usuario = $_SESSION['usuario'];
                 .catch(error => console.error('Error:', error));
         }
         
-        function cerrarSesion() {
-            fetch('../../controlador/AuthController.php?accion=logout')
-                .then(response => response.json())
-                .then(data => {
-                    window.location.href = '../../index.php';
-                });
-        }
+        // Función eliminada a favor de link directo
+
     </script>
 </body>
 </html>
