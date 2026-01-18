@@ -305,7 +305,7 @@ $usuario = $_SESSION['usuario'];
             }
             
             const botonHTML = producto.stock > 0 
-                ? `<button class="btn btn-primary mt-auto" onclick="agregarAlCarrito(${producto.id_producto}, '${producto.nombre.replace(/'/g, "\\'")}')"><i class="fas fa-cart-plus"></i> Agregar al carrito</button>`
+                ? `<button class="btn btn-primary mt-auto" onclick="carrito.agregarProducto(${JSON.stringify(producto).replace(/"/g, '&quot;')})"><i class="fas fa-cart-plus"></i> Agregar al carrito</button>`
                 : `<button class="btn btn-secondary mt-auto" disabled><i class="fas fa-ban"></i> Sin stock</button>`;
             
             return `
