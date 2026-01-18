@@ -124,6 +124,13 @@
                     <p class="mt-3 text-muted">Cargando productos...</p>
                 </div>
             </div>
+            <!-- Botón Mostrar Más -->
+            <div id="mostrar-mas-container" class="text-center mt-4 d-none">
+                <button id="btn-mostrar-mas" class="btn btn-primary btn-lg">
+                    <i class="fas fa-plus-circle"></i> Mostrar más productos
+                </button>
+                <p id="productos-info" class="text-muted mt-2"></p>
+            </div>
         </div>
     </section>
 
@@ -232,6 +239,11 @@
         let filtroMarca = '';
         let filtroOrdenar = '';
         
+        // Variables de paginación
+        const PRODUCTOS_POR_PAGINA = 15;
+        let todosLosProductos = [];
+        let productosVisibles = 0;
+        
         // Cargar productos y marcas al iniciar
         document.addEventListener('DOMContentLoaded', function() {
             cargarMarcas();
@@ -274,6 +286,11 @@
                 filtroOrdenar = this.value;
                 cargarProductos();
             });
+            
+            // Configurar botón mostrar más
+            document.getElementById('btn-mostrar-mas').addEventListener('click', function() {
+                mostrarMasProductos();
+            });
         });
         
         function ordenarProductos(productos) {
@@ -295,7 +312,7 @@
             });
         }
         
-        function cargarProductos() {
+        function cargarProductos(resetear = true) {
             let url = 'controlador/ProductoController.php?accion=filtrar';
             
             if (filtroGenero) {
@@ -314,8 +331,10 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.productos) {
-                        const productosOrdenados = ordenarProductos(data.productos);
-                        renderizarProductos(productosOrdenados);
+                        todosLosProductos = ordenarProductos(data.productos);
+                        productosVisibles = 0;
+                        document.getElementById('productos-contenedor').innerHTML = '';
+                        mostrarMasProductos();
                     }
                 })
                 .catch(error => {
@@ -326,6 +345,89 @@
                         </div>
                     `;
                 });
+        }
+        
+        function mostrarMasProductos() {
+            const contenedor = document.getElementById('productos-contenedor');
+            const inicio = productosVisibles;
+            const fin = Math.min(productosVisibles + PRODUCTOS_POR_PAGINA, todosLosProductos.length);
+            
+            for (let i = inicio; i < fin; i++) {
+                const producto = todosLosProductos[i];
+                contenedor.innerHTML += generarCardProducto(producto);
+            }
+            
+            productosVisibles = fin;
+            actualizarBotonMostrarMas();
+        }
+        
+        function actualizarBotonMostrarMas() {
+            const container = document.getElementById('mostrar-mas-container');
+            const info = document.getElementById('productos-info');
+            const total = todosLosProductos.length;
+            
+            if (productosVisibles < total) {
+                container.classList.remove('d-none');
+                const restantes = total - productosVisibles;
+                info.textContent = `Mostrando ${productosVisibles} de ${total} productos (${restantes} restantes)`;
+            } else {
+                container.classList.add('d-none');
+                if (total > 0) {
+                    info.textContent = `Mostrando todos los ${total} productos`;
+                }
+            }
+        }
+        
+        function generarCardProducto(producto) {
+            let precioHTML;
+            if (producto.tiene_promocion && producto.porcentaje_descuento > 0) {
+                precioHTML = `
+                    <div class="mb-2">
+                        <span class="text-decoration-line-through text-muted">$${parseFloat(producto.precio_original || producto.precio).toFixed(2)}</span>
+                        <span class="badge bg-danger ms-2">-${producto.porcentaje_descuento}%</span>
+                    </div>
+                    <p class="card-text precio fs-4 fw-bold text-success">$${parseFloat(producto.precio_final).toFixed(2)}</p>
+                `;
+            } else {
+                precioHTML = `<p class="card-text precio fs-4 fw-bold">$${parseFloat(producto.precio_final || producto.precio).toFixed(2)}</p>`;
+            }
+            
+            let stockHTML = '';
+            if (producto.stock <= 0) {
+                stockHTML = `<span class="badge bg-danger">Agotado</span>`;
+            } else if (producto.stock <= 5) {
+                stockHTML = `<span class="badge bg-warning text-dark">¡Últimas ${producto.stock} unidades!</span>`;
+            }
+            
+            let imagenUrl = producto.imagen_url || 'img/placeholder.svg';
+            if (imagenUrl.startsWith('http://') || imagenUrl.startsWith('https://')) {
+                // URL externa (Cloudinary)
+            } else if (!imagenUrl.startsWith('/') && !imagenUrl.startsWith('img/')) {
+                imagenUrl = 'img/' + imagenUrl;
+            }
+            
+            return `
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card product-card h-100">
+                        <img src="${imagenUrl}" class="card-img-top product-img" 
+                             alt="${producto.nombre}"
+                             onerror="this.src='img/placeholder.svg'">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">${producto.nombre}</h5>
+                            <div class="mb-2">
+                                <span class="badge bg-primary me-1">${producto.genero}</span>
+                                <span class="badge bg-secondary">${producto.tipo === 'deportivo' ? 'Deportivo' : 'No Deportivo'}</span>
+                                ${stockHTML}
+                            </div>
+                            <p class="text-muted mb-2"><i class="fas fa-ruler"></i> Talla: ${producto.talla}</p>
+                            ${precioHTML}
+                            <a href="vista/login.php" class="btn btn-primary mt-auto">
+                                <i class="fas fa-shopping-cart"></i> Comprar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `;
         }
         
         function cargarMarcas() {
