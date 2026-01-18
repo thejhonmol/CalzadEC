@@ -59,6 +59,13 @@
                         <a class="nav-link" href="vista/login.php"><i class="fas fa-sign-in-alt"></i> Ingresar</a>
                     </li>
                     <?php else: ?>
+                    <?php if ($_SESSION['usuario']['rol'] === 'admin'): ?>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-outline-warning btn-sm me-2" href="vista/admin/dashboard.php">
+                            <i class="fas fa-cogs"></i> Panel Admin
+                        </a>
+                    </li>
+                    <?php endif; ?>
                     <li class="nav-item">
                         <a class="nav-link" href="<?php echo $_SESSION['usuario']['rol'] === 'admin' ? 'vista/admin/dashboard.php' : 'vista/cliente/perfil.php'; ?>">
                             <i class="fas fa-user"></i> Mi Perfil
