@@ -217,11 +217,9 @@ if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['rol'] !== 'admin') {
     
     <script>
         // CONFIGURACIÓN CLOUDINARY
-        // 1. Regístrate gratis en https://cloudinary.com/
-        // 2. Ve a Settings > Upload > Upload presets > Add upload preset (Mode: Unsigned)
-        // 3. Copia tu Cloud Name y el nombre del Preset creado abajo:
-        const CLOUDINARY_CLOUD_NAME = 'demo'; // Reemplazar con tu cloud name
-        const CLOUDINARY_UPLOAD_PRESET = 'docs_upload_example_us_preset'; // Reemplazar con tu upload preset
+        // Credenciales configuradas para CalzadEC
+        const CLOUDINARY_CLOUD_NAME = 'dhdsmsdkp';
+        const CLOUDINARY_UPLOAD_PRESET = 'calzadec_preset';
         
         // Widget de Cloudinary
         let myWidget = cloudinary.createUploadWidget({
