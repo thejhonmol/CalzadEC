@@ -22,6 +22,8 @@ Desarrollar una aplicación web con arquitectura Modelo-Vista-Controlador para l
 
 8. **Implementar funcionalidades CRUD completas** (Crear, Leer, Actualizar, Eliminar) para todas las entidades principales del sistema: productos, clientes y ventas.
 
-9. **Desarrollar reportes administrativos** que permitan visualizar estadísticas de ventas, productos más vendidos y estado general del negocio.
+9. **Desarrollar un sistema de reportes administrativos** que permitan visualizar estadísticas dinámicas y exportar documentos en formato PDF para el análisis del negocio.
 
-10. **Preparar la aplicación para despliegue en servidor web**, asegurando la correcta configuración de la base de datos y archivos necesarios para su funcionamiento en producción.
+10. **Implementar un centro de autogestión de perfil** para clientes, permitiendo la actualización segura de sus datos de contacto y dirección.
+
+11. **Preparar la aplicación para despliegue en servidor web**, asegurando la correcta configuración de la base de datos y archivos necesarios para su funcionamiento en producción.

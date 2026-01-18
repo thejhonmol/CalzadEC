@@ -160,6 +160,7 @@ mysqldump -u root -p tienda_calzado > respaldo.sql
 **Actualizar datos:**
 - Acceder al panel de administración
 - Usar las funciones CRUD para gestionar productos, clientes y promociones
+- Administrar datos de perfil y generar reportes financieros con exportación PDF
 
 ### Soporte
 

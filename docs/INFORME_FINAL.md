@@ -63,7 +63,8 @@ Se utilizó una metodología ágil iterativa basada en el modelo de Prototipado 
 - Sistema de autenticación por roles
 - Carrito de compras
 - Generación de facturas
-- Panel administrativo con estadísticas
+- Panel administrativo con reportes detallados y exportación PDF
+- Gestión de perfil de usuario (Cliente)
 
 ### 4.2 Diseño
 
@@ -80,7 +81,9 @@ Se utilizó una metodología ágil iterativa basada en el modelo de Prototipado 
 - Gestión de promociones segmentadas (Administrador)
 - Navegación de catálogo (Cliente)
 - Realizar compra (Cliente)
-- Dashboard con estadísticas (Administrador)
+- Dashboard con estadísticas y centro de reportes (Administrador)
+- Gestión de perfil personal (Cliente)
+- Exportación de reportes a PDF (Administrador)
 
 **Arquitectura MVC:**
 - **Modelo:** Clases PHP (Marca, Producto, Promocion, Venta, Usuario)
@@ -120,6 +123,9 @@ tienda-calzado/
 - Actualización automática de stock
 - Cálculo automático de precios con descuentos
 - Generación de facturas en tiempo real
+- Sistema de reportes administrativos con visualización dinámica
+- Exportación profesional de documentos a PDF
+- Interfaz de edición de perfil para el usuario final
 
 ### 4.4 Pruebas
 
@@ -157,6 +163,10 @@ Se realizaron pruebas exhaustivas:
 
 5. **Interfaz Moderna y Unificada:** Diseño consistente de tarjetas de productos en catálogo e inicio, con manejo visual de stock (etiquetas, escala de grises para agotados) y experiencia de usuario fluida.
 
+6. **Centro de Reportes Avanzado:** Implementación de 4 reportes estratégicos (Ventas, Productos, Inventario, Clientes) con capacidad de exportación a PDF, permitiendo una gestión basada en datos.
+
+7. **Autogestión de Perfil:** Los clientes cuentan con un espacio para visualizar y actualizar sus datos de contacto de forma segura.
+
 ## 6. CONCLUSIONES
 
 1. La arquitectura MVC facilitó la escalabilidad del sistema, permitiendo agregar módulos como el de gestión de marcas y promociones segmentadas sin afectar la lógica existente.
@@ -165,9 +175,11 @@ Se realizaron pruebas exhaustivas:
 
 3. El sistema de manejo de imágenes con fallbacks automáticos (SVG placeholders) asegura una presentación visual robusta incluso ante errores de carga.
 
-4. La centralización de la lógica de negocio en la base de datos (triggers, vistas) garantiza la integridad de los datos críticos como el stock y el historial de ventas.
+4. La centralización de la lógica de negocio en la base de datos (triggers, vistas) y el uso de controladores especializados para reportes garantiza la integridad de los datos financieros.
 
-5. La separación de roles y la implementación de permisos específicos protegen las funcionalidades sensibles del sistema.
+5. La integración de librerías como jsPDF permite extender las capacidades del sistema hacia la generación de documentos físicos/digitales portables.
+
+6. La separación de roles y la implementación de permisos específicos protegen las funcionalidades sensibles del sistema.
 
 ## 7. RECOMENDACIONES
 
@@ -175,7 +187,7 @@ Se realizaron pruebas exhaustivas:
 
 2. **Integrar pasarela de pagos** para permitir transacciones reales en línea.
 
-3. **Expandir el módulo de reportes** con gráficos interactivos para análisis de tendencias de ventas.
+3. **Integrar gráficos estadísticos** interactivos en el centro de reportes para un análisis visual de tendencias más intuitivo.
 
 4. **Optimizar la carga de imágenes** implementando lazy loading para catálogos extensos.
 

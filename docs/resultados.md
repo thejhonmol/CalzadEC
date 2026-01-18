@@ -20,6 +20,12 @@
 6. **Gestión Integral de Marcas**
    - Se desarrolló un módulo completo para la gestión de marcas de calzado, permitiendo al administrador crear y administrar el catálogo de marcas, las cuales se vinculan dinámicamente tanto a los productos como a las reglas de promociones.
 
+7. **Sistema de Reportes y Exportación PDF**
+   - Se implementó un centro de reportes administrativos con 4 tipos de informes: Ventas por Fecha, Top Productos, Inventario y Resumen de Clientes. Estos reportes incluyen visualización dinámica en tablas y la capacidad de exportación profesional a documentos PDF mediante la librería jsPDF, facilitando la auditoría y análisis del negocio.
+
+8. **Centro de Autogestión de Perfil**
+   - Se desarrolló un módulo de perfil para clientes que permite visualizar sus datos informativos y editar de forma segura su número de teléfono y dirección. El sistema actualiza automáticamente la sesión del usuario para reflejar los cambios de inmediato sin necesidad de re-autenticación.
+
 
 ## Características Técnicas Destacadas
 

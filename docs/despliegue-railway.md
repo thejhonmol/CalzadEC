@@ -206,7 +206,8 @@ Haz commit y push de los cambios.
 | `Dockerfile` | Configuración del contenedor para Railway |
 | `config/conexion.php` | Conexión a BD con soporte para variables de entorno |
 | `database/schema_railway.sql` | Schema adaptado para Railway (sin CREATE DATABASE) |
-| `vista/admin/productos.php` | Contiene configuración de Cloudinary |
+| `vista/admin/reportes.php` | Centro de reportes con exportación PDF |
+| `vista/cliente/perfil.php` | Gestión de perfil de usuario final |
 
 ---
 

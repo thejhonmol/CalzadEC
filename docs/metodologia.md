@@ -40,7 +40,8 @@ Para el desarrollo de esta aplicación web se ha seleccionado una **metodología
 - Caso de Uso 4: Navegación de Catálogo (Cliente)
 - Caso de Uso 5: Realizar Compra (Cliente)
 - Caso de Uso 6: Gestión de Promociones (Administrador)
-- Caso de Uso 7: Generación de Reportes (Administrador)
+- Caso de Uso 7: Generación de Reportes y Exportación PDF (Administrador)
+- Caso de Uso 8: Gestión de Perfil de Usuario (Cliente)
 
 #### 2.2 Mockups y Wireframes
 Se desarrollarán mockups para las siguientes interfaces:
@@ -97,6 +98,8 @@ Se desarrollarán mockups para las siguientes interfaces:
 - ClienteController.php: Gestión de clientes
 - VentaController.php: Procesamiento de ventas
 - AuthController.php: Autenticación y sesiones
+- ReporteController.php: Agregación de datos y reportes
+- UsuarioController.php: Gestión de perfil de cliente
 
 #### 3.4 Implementación de la Capa Vista
 **Vistas Administrativas:**
@@ -106,11 +109,13 @@ Se desarrollarán mockups para las siguientes interfaces:
 - Gestión de clientes
 - Historial de ventas
 - Gestión de promociones
+- Centro de reportes con exportación PDF
 
 **Vistas de Cliente:**
 - Catálogo con filtros dinámicos
 - Carrito de compras
 - Mis compras (historial)
+- Gestión de perfil personal
 
 **Vistas Compartidas:**
 - Login
@@ -124,6 +129,7 @@ Se desarrollarán mockups para las siguientes interfaces:
   - Validación de cédula ecuatoriana
   - Gestión de carrito
   - Filtros dinámicos de productos
+  - Integración jsPDF para reportes
 
 ### 4. Pruebas
 
@@ -187,9 +193,9 @@ Se desarrollarán mockups para las siguientes interfaces:
 
 | Fase | Duración Estimada |
 |------|-------------------|
-| Análisis | 3 días |
-| Diseño | 5 días |
-| Implementación | 12 días |
-| Pruebas | 3 días |
-| Implantación | 2 días |
-| **Total** | **25 días** |
+| Análisis | 4 días |
+| Diseño | 6 días |
+| Implementación | 15 días |
+| Pruebas | 4 días |
+| Implantación | 3 días |
+| **Total** | **32 días** |

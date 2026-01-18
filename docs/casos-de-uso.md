@@ -176,14 +176,40 @@
    - Stock bajo
    - Clientes frecuentes
 3. Especifica parámetros (fechas, filtros)
-4. El sistema genera el reporte
-5. Visualiza o descarga el reporte
+4. El sistema genera el reporte dinámicamente en pantalla
+5. El administrador visualiza los datos en una tabla interactiva
+6. Selecciona la opción "Exportar a PDF"
+7. El sistema genera un documento PDF profesional con los datos filtrados
 
 **Precondiciones:**
 - Debe haber datos registrados en el sistema
 
 **Postcondiciones:**
 - Se genera el reporte solicitado
+- Se descarga un archivo PDF con la información oficial
+
+---
+
+## Caso de Uso 8: Gestión de Perfil de Usuario
+
+**Actor:** Cliente  
+**Descripción:** El cliente puede visualizar sus datos y editar su información de contacto (teléfono y dirección).
+
+**Flujo Principal:**
+1. El cliente inicia sesión
+2. Accede a la sección "Mi Perfil"
+3. Visualiza sus datos informativos (Cédula, correo, nombre)
+4. Selecciona "Editar Datos"
+5. Modifica su número de celular o dirección
+6. El sistema valida el formato de los datos
+7. Guarda los cambios
+8. El sistema actualiza la sesión y muestra confirmación
+
+**Precondiciones:**
+- El cliente debe estar autenticado
+
+**Postcondiciones:**
+- La información de contacto se actualiza en la base de datos y en la sesión activa
 
 ---
 
@@ -216,8 +242,11 @@
 │                                       ├─> Realizar      │
 │                                       │   Compra        │
 │                                       │                 │
-│                                       └─> Ver Mis       │
-│                                           Compras       │
+│                                       ├─> Ver Mis       │
+│                                       │   Compras       │
+│                                       │                 │
+│                                       └─> Gestionar     │
+│                                           Perfil        │
 │                                                         │
 └─────────────────────────────────────────────────────────┘
 ```
