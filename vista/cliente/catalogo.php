@@ -32,6 +32,13 @@ $usuario = $_SESSION['usuario'];
     </style>
 </head>
 <body>
+    <!-- Promotion Bar -->
+    <div id="promo-bar-container" class="d-none">
+        <div class="promo-bar">
+            <span id="promo-bar-text"></span>
+        </div>
+    </div>
+
     <!-- Navegación -->
     <nav class="navbar navbar-expand-lg navbar-custom">
         <div class="container">
@@ -70,13 +77,6 @@ $usuario = $_SESSION['usuario'];
             </div>
         </div>
     </nav>
-
-    <!-- Promotion Bar -->
-    <div id="promo-bar-container" class="d-none">
-        <div class="promo-bar">
-            <span id="promo-bar-text"></span>
-        </div>
-    </div>
 
     <!-- Bienvenida -->
     <section class="bg-light py-4">

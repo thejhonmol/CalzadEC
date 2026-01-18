@@ -26,6 +26,13 @@
     <link rel="stylesheet" href="css/estilos.css?v=<?php echo time(); ?>">
 </head>
 <body>
+    <!-- Promotion Bar -->
+    <div id="promo-bar-container" class="d-none">
+        <div class="promo-bar">
+            <span id="promo-bar-text"></span>
+        </div>
+    </div>
+
     <!-- Navegación -->
     <nav class="navbar navbar-expand-lg navbar-custom">
         <div class="container">
@@ -72,13 +79,6 @@
             </div>
         </div>
     </nav>
-
-    <!-- Promotion Bar -->
-    <div id="promo-bar-container" class="d-none">
-        <div class="promo-bar">
-            <span id="promo-bar-text"></span>
-        </div>
-    </div>
 
     <!-- Hero Section -->
     <section class="hero-section" style="background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%); color: white; padding: 4rem 0;">
