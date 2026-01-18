@@ -71,6 +71,13 @@ $usuario = $_SESSION['usuario'];
         </div>
     </nav>
 
+    <!-- Promotion Bar -->
+    <div id="promo-bar-container" class="d-none">
+        <div class="promo-bar">
+            <span id="promo-bar-text"></span>
+        </div>
+    </div>
+
     <!-- Bienvenida -->
     <section class="bg-light py-4">
         <div class="container">
@@ -203,7 +210,25 @@ $usuario = $_SESSION['usuario'];
             document.getElementById('btn-mostrar-mas').addEventListener('click', function() {
                 mostrarMasProductos();
             });
+
+            // Cargar barra de promociones
+            cargarPromociones();
         });
+
+        // Cargar promociones activas
+        function cargarPromociones() {
+            fetch('../../controlador/PromocionController.php?accion=activas')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.promociones && data.promociones.length > 0) {
+                        const promo = data.promociones[0];
+                        document.getElementById('promo-bar-text').innerHTML = 
+                            `🔥 <strong>${promo.nombre}:</strong> ${promo.descripcion} - ¡Hasta ${parseFloat(promo.porcentaje_descuento).toFixed(0)}% de descuento!`;
+                        document.getElementById('promo-bar-container').classList.remove('d-none');
+                    }
+                })
+                .catch(error => console.error('Error al cargar promociones:', error));
+        }
         
         function ordenarProductos(productos) {
             if (!filtroOrdenar) return productos;
@@ -279,15 +304,20 @@ $usuario = $_SESSION['usuario'];
         function generarCardProducto(producto) {
             const stock = parseInt(producto.stock) || 0;
             const agotado = stock <= 0;
+            const tienePromocion = producto.tiene_promocion && producto.porcentaje_descuento > 0;
+
+            // Badge flotante con animación
+            const badgePromo = tienePromocion 
+                ? `<div class="promo-badge-floating">-${parseFloat(producto.porcentaje_descuento).toFixed(0)}%</div>` 
+                : '';
 
             let precioHTML;
-            if (producto.tiene_promocion && producto.porcentaje_descuento > 0) {
+            if (tienePromocion) {
                 precioHTML = `
                     <div class="mb-2">
                         <span class="text-decoration-line-through text-muted">$${parseFloat(producto.precio_original || producto.precio).toFixed(2)}</span>
-                        <span class="badge bg-danger ms-2">-${producto.porcentaje_descuento}%</span>
                     </div>
-                    <p class="card-text precio fs-4 fw-bold text-success">$${parseFloat(producto.precio_final).toFixed(2)}</p>
+                    <p class="card-text precio precio-promo fs-4 fw-bold">$${parseFloat(producto.precio_final).toFixed(2)}</p>
                 `;
             } else {
                 precioHTML = `<p class="card-text precio fs-4 fw-bold">$${parseFloat(producto.precio_final || producto.precio).toFixed(2)}</p>`;
@@ -329,6 +359,7 @@ $usuario = $_SESSION['usuario'];
                 <div class="col-lg-4 col-md-6 mb-4">
                     <div class="card product-card h-100 ${agotado ? 'opacity-75' : ''}">
                         <div class="position-relative">
+                            ${badgePromo}
                             <img src="${imagenUrl}" class="card-img-top product-img ${agotado ? 'filter-grayscale' : ''}" 
                                  alt="${producto.nombre}"
                                  onerror="this.src='../../img/placeholder.svg'"
