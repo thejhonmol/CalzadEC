@@ -100,8 +100,18 @@
             <h2 class="promo-section-title">
                 <i class="fas fa-fire"></i> Ofertas Destacadas
             </h2>
-            <div id="productos-ofertas" class="row">
-                <!-- Product cards will be inserted here -->
+            <div class="carousel-container position-relative">
+                <button class="carousel-nav-btn carousel-prev" id="carousel-prev" aria-label="Anterior">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <div class="carousel-wrapper">
+                    <div id="productos-ofertas" class="carousel-track">
+                        <!-- Product cards will be inserted here -->
+                    </div>
+                </div>
+                <button class="carousel-nav-btn carousel-next" id="carousel-next" aria-label="Siguiente">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
             </div>
         </div>
     </section>
@@ -389,9 +399,55 @@
                             contenedor.innerHTML += generarCardProducto(producto, true);
                         });
                         document.getElementById('ofertas-destacadas').classList.remove('d-none');
+                        
+                        // Inicializar carrusel
+                        inicializarCarousel();
                     }
                 })
                 .catch(error => console.error('Error al cargar productos en oferta:', error));
+        }
+
+        // Variables del carousel
+        let carouselIndex = 0;
+        const itemsPerView = 3; // Mostrar 3 productos a la vez
+
+        function inicializarCarousel() {
+            const prevBtn = document.getElementById('carousel-prev');
+            const nextBtn = document.getElementById('carousel-next');
+            const track = document.getElementById('productos-ofertas');
+            const cards = track.querySelectorAll('.col-lg-4');
+            const totalItems = cards.length;
+
+            // Calcular máximo índice
+            const maxIndex = Math.max(0, totalItems - itemsPerView);
+
+            // Función para actualizar la posición
+            function updateCarousel() {
+                const percentage = -(carouselIndex * (100 / itemsPerView));
+                track.style.transform = `translateX(${percentage}%)`;
+                
+                // Actualizar estado de botones
+                prevBtn.disabled = carouselIndex === 0;
+                nextBtn.disabled = carouselIndex >= maxIndex;
+            }
+
+            // Event listeners
+            prevBtn.addEventListener('click', () => {
+                if (carouselIndex > 0) {
+                    carouselIndex--;
+                    updateCarousel();
+                }
+            });
+
+            nextBtn.addEventListener('click', () => {
+                if (carouselIndex < maxIndex) {
+                    carouselIndex++;
+                    updateCarousel();
+                }
+            });
+
+            // Inicializar
+            updateCarousel();
         }
         
         function ordenarProductos(productos) {

@@ -173,8 +173,15 @@ class ProductoController {
         $genero = $_GET['genero'] ?? null;
         $tipo = $_GET['tipo'] ?? null;
         $marca = $_GET['marca'] ?? null;
+        $ofertas = isset($_GET['ofertas']) && $_GET['ofertas'] === '1';
         
-        $productos = $this->modelo->obtenerPorCategoria($genero, $tipo, $marca);
+        if ($ofertas) {
+            // Si se solicita solo ofertas, obtener productos con promoción activa
+            $productos = $this->modelo->obtenerConPromocion();
+        } else {
+            $productos = $this->modelo->obtenerPorCategoria($genero, $tipo, $marca);
+        }
+        
         $this->responder(['productos' => $productos]);
     }
     
