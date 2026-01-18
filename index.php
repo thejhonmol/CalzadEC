@@ -52,7 +52,7 @@
                     </li>
                     <?php else: ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?php echo $_SESSION['usuario']['rol'] === 'admin' ? 'vista/admin/dashboard.php' : 'vista/cliente/mis-compras.php'; ?>">
+                        <a class="nav-link" href="<?php echo $_SESSION['usuario']['rol'] === 'admin' ? 'vista/admin/dashboard.php' : 'vista/cliente/perfil.php'; ?>">
                             <i class="fas fa-user"></i> Mi Perfil
                         </a>
                     </li>
