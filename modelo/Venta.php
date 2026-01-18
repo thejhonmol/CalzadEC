@@ -79,7 +79,7 @@ class Venta {
             $idVenta = $this->conexion->lastInsertId();
             
             // Insertar detalles de venta y actualizar stock
-            $sqlDetalle = "INSERT INTO detalle_ventas (id_venta, id_producto, cantidad, precio_unitario, subtotal) 
+            $sqlDetalle = "INSERT INTO ventas_detalle (id_venta, id_producto, cantidad, precio_unitario, subtotal) 
                            VALUES (:id_venta, :id_producto, :cantidad, :precio_unitario, :subtotal)";
             
             $stmtDetalle = $this->conexion->prepare($sqlDetalle);
@@ -167,7 +167,7 @@ class Venta {
             
             // Obtener detalles de la venta
             $sqlDetalles = "SELECT dv.*, p.nombre AS nombre_producto, p.codigo_producto, p.genero, p.tipo, p.talla
-                            FROM detalle_ventas dv
+                            FROM ventas_detalle dv
                             INNER JOIN productos p ON dv.id_producto = p.id_producto
                             WHERE dv.id_venta = :id";
             
@@ -242,7 +242,7 @@ class Venta {
             
             // Productos más vendidos
             $sql = "SELECT p.nombre, SUM(dv.cantidad) as total_vendido, SUM(dv.subtotal) as ingresos
-                    FROM detalle_ventas dv
+                    FROM ventas_detalle dv
                     INNER JOIN productos p ON dv.id_producto = p.id_producto
                     INNER JOIN ventas v ON dv.id_venta = v.id_venta
                     WHERE v.estado = 'completada'
