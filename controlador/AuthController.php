@@ -120,14 +120,10 @@ class AuthController {
         session_unset();
         session_destroy();
         
-        // Ruta absoluta desde la raíz del proyecto
+        // Redirigir al inicio después de cerrar sesión
         $baseUrl = dirname(dirname($_SERVER['PHP_SELF']));
-        
-        $this->responder([
-            'success' => true,
-            'mensaje' => 'Sesión cerrada',
-            'redireccion' => $baseUrl . '/index.php'
-        ]);
+        header("Location: " . $baseUrl . "/index.php");
+        exit;
     }
     
     /**
