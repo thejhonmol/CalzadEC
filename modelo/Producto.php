@@ -325,9 +325,12 @@ class Producto {
      */
     public function obtenerStockBajo() {
         try {
-            $sql = "SELECT * FROM vista_stock_bajo";
+            $sql = "SELECT id_producto, nombre, stock, talla, genero 
+                    FROM productos 
+                    WHERE stock < 10 AND estado = 'activo'
+                    ORDER BY stock ASC";
             $stmt = $this->conexion->query($sql);
-            return $stmt->fetchAll();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
             
         } catch (PDOException $e) {
             error_log("Error al obtener stock bajo: " . $e->getMessage());

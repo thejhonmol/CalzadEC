@@ -139,6 +139,7 @@ $usuario = $_SESSION['usuario'];
                         document.getElementById('ventas-hoy').textContent = stats.hoy.total || 0;
                         document.getElementById('ingresos-hoy').textContent = '$' + (parseFloat(stats.hoy.monto) || 0).toFixed(2);
                         document.getElementById('ventas-mes').textContent = stats.mes.total || 0;
+                        document.getElementById('stock-bajo').textContent = stats.stock_bajo_count || 0;
                         
                         // Productos más vendidos
                         if (stats.productos_top && stats.productos_top.length > 0) {

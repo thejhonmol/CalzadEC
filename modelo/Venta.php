@@ -240,6 +240,12 @@ class Venta {
             $stmt = $this->conexion->query($sql);
             $stats['mes'] = $stmt->fetch();
             
+            // Total de productos con stock bajo
+            $sql = "SELECT COUNT(*) as total FROM productos WHERE stock < 10 AND estado = 'activo'";
+            $stmt = $this->conexion->query($sql);
+            $resultadoStock = $stmt->fetch();
+            $stats['stock_bajo_count'] = $resultadoStock['total'];
+            
             // Productos más vendidos
             $sql = "SELECT p.nombre, SUM(dv.cantidad) as total_vendido, SUM(dv.subtotal) as ingresos
                     FROM ventas_detalle dv
