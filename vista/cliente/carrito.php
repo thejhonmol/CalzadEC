@@ -101,11 +101,15 @@ $usuario = $_SESSION['usuario'];
             }
             
             let html = '';
-            let subtotal = 0;
+            let subtotalOriginal = 0;
+            let subtotalFinal = 0;
             
             items.forEach(item => {
-                const precioTotal = item.precio * item.cantidad;
-                subtotal += precioTotal;
+                const precioOriginal = parseFloat(item.precio_original || item.precio);
+                const precioFinal = parseFloat(item.precio_final || item.precio);
+                const precioTotal = precioFinal * item.cantidad;
+                subtotalOriginal += precioOriginal * item.cantidad;
+                subtotalFinal += precioTotal;
                 
                 // Ruta de imagen - usar placeholder.svg si no existe
                 let imagenRuta = '../../img/placeholder.svg';
@@ -124,6 +128,12 @@ $usuario = $_SESSION['usuario'];
                     }
                 }
                 
+                // Mostrar precio original tachado si hay descuento
+                const tieneDescuento = precioOriginal > precioFinal;
+                const precioHTML = tieneDescuento
+                    ? `<p class="text-muted mb-0"><del>$${precioOriginal.toFixed(2)}</del> <span class="text-success fw-bold">$${precioFinal.toFixed(2)}</span></p>`
+                    : `<p class="text-muted mb-2">Precio: $${precioFinal.toFixed(2)}</p>`;
+                
                 html += `
                     <div class="cart-item">
                         <img src="${imagenRuta}" 
@@ -133,7 +143,7 @@ $usuario = $_SESSION['usuario'];
                              style="object-fit: cover; flex-shrink: 0;">
                         <div class="flex-grow-1">
                             <h5 class="mb-1">${item.nombre}</h5>
-                            <p class="text-muted mb-2">Precio: $${item.precio}</p>
+                            ${precioHTML}
                             <div class="input-group" style="width: 120px;">
                                 <button class="btn btn-outline-secondary btn-sm" onclick="carrito.actualizarCantidad(${item.id_producto}, ${item.cantidad - 1})">-</button>
                                 <input type="number" class="form-control form-control-sm text-center" value="${item.cantidad}" readonly>
@@ -150,10 +160,12 @@ $usuario = $_SESSION['usuario'];
                 `;
             });
             
+            const descuento = subtotalOriginal - subtotalFinal;
+            
             contenedor.innerHTML = html;
-            document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
-            document.getElementById('descuento').textContent = '$0.00';
-            document.getElementById('total').textContent = `$${subtotal.toFixed(2)}`;
+            document.getElementById('subtotal').textContent = `$${subtotalOriginal.toFixed(2)}`;
+            document.getElementById('descuento').textContent = `-$${descuento.toFixed(2)}`;
+            document.getElementById('total').textContent = `$${subtotalFinal.toFixed(2)}`;
         }
         
         function finalizarCompra() {
