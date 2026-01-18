@@ -63,7 +63,7 @@ $usuario = $_SESSION['usuario'];
                             <i class="fas fa-user"></i> <?php echo htmlspecialchars($usuario['nombre_completo']); ?>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#" onclick="cerrarSesion()"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a></li>
+                            <li><a class="dropdown-item" href="../../controlador/AuthController.php?accion=logout"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -277,6 +277,9 @@ $usuario = $_SESSION['usuario'];
         }
         
         function generarCardProducto(producto) {
+            const stock = parseInt(producto.stock) || 0;
+            const agotado = stock <= 0;
+
             let precioHTML;
             if (producto.tiene_promocion && producto.porcentaje_descuento > 0) {
                 precioHTML = `
@@ -291,10 +294,12 @@ $usuario = $_SESSION['usuario'];
             }
             
             let stockHTML = '';
-            if (producto.stock <= 0) {
-                stockHTML = `<span class="badge bg-danger">Agotado</span>`;
-            } else if (producto.stock <= 5) {
-                stockHTML = `<span class="badge bg-warning text-dark">¡Últimas ${producto.stock} unidades!</span>`;
+            if (agotado) {
+                stockHTML = `<span class="badge bg-danger"><i class="fas fa-exclamation-triangle"></i> Sin stock</span>`;
+            } else if (stock <= 5) {
+                stockHTML = `<span class="badge bg-warning text-dark"><i class="fas fa-exclamation-circle"></i> ¡Últimas ${stock} unidades!</span>`;
+            } else {
+                stockHTML = `<span class="badge bg-success"><i class="fas fa-check-circle"></i> Disponible</span>`;
             }
             
             let imagenUrl = producto.imagen_url || '../../img/placeholder.svg';
@@ -303,17 +308,33 @@ $usuario = $_SESSION['usuario'];
             } else if (!imagenUrl.startsWith('/') && !imagenUrl.startsWith('../../img/')) {
                 imagenUrl = '../../img/' + imagenUrl;
             }
+
+            const agotadoOverlay = agotado
+                ? `<div class="position-absolute top-50 start-50 translate-middle" 
+                        style="z-index: 10; background: rgba(220, 53, 69, 0.9); 
+                               color: white; padding: 10px 30px; 
+                               border-radius: 8px; font-weight: bold; 
+                               box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
+                       <i class="fas fa-times-circle"></i> AGOTADO
+                   </div>`
+                : '';
             
-            const botonHTML = producto.stock > 0 
-                ? `<button class="btn btn-primary mt-auto" onclick="carrito.agregarProducto(${JSON.stringify(producto).replace(/"/g, '&quot;')})"><i class="fas fa-cart-plus"></i> Agregar al carrito</button>`
-                : `<button class="btn btn-secondary mt-auto" disabled><i class="fas fa-ban"></i> Sin stock</button>`;
+            const botonHTML = agotado 
+                ? `<button class="btn btn-secondary mt-auto" disabled><i class="fas fa-ban"></i> No Disponible</button>`
+                : `<button class="btn btn-primary mt-auto" onclick="carrito.agregarProducto(${JSON.stringify(producto).replace(/"/g, '&quot;')})">
+                    <i class="fas fa-cart-plus"></i> Agregar al carrito
+                   </button>`;
             
             return `
                 <div class="col-lg-4 col-md-6 mb-4">
-                    <div class="card product-card h-100">
-                        <img src="${imagenUrl}" class="card-img-top product-img" 
-                             alt="${producto.nombre}"
-                             onerror="this.src='../../img/placeholder.svg'">
+                    <div class="card product-card h-100 ${agotado ? 'opacity-75' : ''}">
+                        <div class="position-relative">
+                            <img src="${imagenUrl}" class="card-img-top product-img ${agotado ? 'filter-grayscale' : ''}" 
+                                 alt="${producto.nombre}"
+                                 onerror="this.src='../../img/placeholder.svg'"
+                                 style="height: 250px; object-fit: cover;">
+                            ${agotadoOverlay}
+                        </div>
                         <div class="card-body d-flex flex-column">
                             <h5 class="card-title">${producto.nombre}</h5>
                             <div class="mb-2">
@@ -444,13 +465,8 @@ $usuario = $_SESSION['usuario'];
             });
         }
         
-        function cerrarSesion() {
-            fetch('../../controlador/AuthController.php?accion=logout')
-                .then(response => response.json())
-                .then(data => {
-                    window.location.href = '../../index.php';
-                });
-        }
+        // Función eliminada a favor de link directo
+
         
         function cargarMarcas() {
             fetch('../../controlador/MarcaController.php?accion=listar')
