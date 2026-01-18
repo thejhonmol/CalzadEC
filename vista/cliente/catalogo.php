@@ -19,6 +19,7 @@ $usuario = $_SESSION['usuario'];
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../../css/estilos.css">
+    <link rel="stylesheet" href="../../css/carousel.css">
     <style>
         .filter-grayscale {
             filter: grayscale(100%);
@@ -83,6 +84,28 @@ $usuario = $_SESSION['usuario'];
         <div class="container">
             <h2>Bienvenido, <?php echo htmlspecialchars($usuario['nombre_completo']); ?>! 👋</h2>
             <p class="text-muted">Explora nuestro catálogo y encuentra el calzado perfecto para ti.</p>
+        </div>
+    </section>
+
+    <!-- Ofertas Destacadas Section -->
+    <section id="ofertas-destacadas" class="py-5 d-none">
+        <div class="container">
+            <h2 class="promo-section-title">
+                <i class="fas fa-fire"></i> Ofertas Destacadas
+            </h2>
+            <div class="carousel-container position-relative">
+                <button class="carousel-nav-btn carousel-prev" id="carousel-prev" aria-label="Anterior">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <div class="carousel-wrapper">
+                    <div id="productos-ofertas" class="carousel-track">
+                        <!-- Product cards will be inserted here -->
+                    </div>
+                </div>
+                <button class="carousel-nav-btn carousel-next" id="carousel-next" aria-label="Siguiente">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
         </div>
     </section>
 
@@ -235,6 +258,9 @@ $usuario = $_SESSION['usuario'];
                         if (promocionesActivas.length > 1) {
                             intervaloPromocion = setInterval(rotarPromocion, 5000);
                         }
+
+                        // Cargar productos con ofertas
+                        cargarProductosOfertas();
                     }
                 })
                 .catch(error => console.error('Error al cargar promociones:', error));
@@ -257,6 +283,63 @@ $usuario = $_SESSION['usuario'];
         function rotarPromocion() {
             indicePromocionActual = (indicePromocionActual + 1) % promocionesActivas.length;
             mostrarPromocion(indicePromocionActual);
+        }
+
+        // Cargar productos con promociones activas
+        function cargarProductosOfertas() {
+            fetch('../../controlador/ProductoController.php?accion=filtrar&ofertas=1')
+                .then(response => response.json())
+                .then(data => {
+                    const contenedor = document.getElementById('productos-ofertas');
+                    
+                    if (data.productos && data.productos.length > 0) {
+                        contenedor.innerHTML = '';
+                        data.productos.forEach(producto => {
+                            contenedor.innerHTML += generarCardProducto(producto, true);
+                        });
+                        document.getElementById('ofertas-destacadas').classList.remove('d-none');
+                        
+                        // Inicializar carrusel
+                        inicializarCarousel();
+                    }
+                })
+                .catch(error => console.error('Error al cargar productos en oferta:', error));
+        }
+
+        // Variables del carousel
+        let carouselIndex = 0;
+        const itemsPerView = 3;
+
+        function inicializarCarousel() {
+            const prevBtn = document.getElementById('carousel-prev');
+            const nextBtn = document.getElementById('carousel-next');
+            const track = document.getElementById('productos-ofertas');
+            const cards = track.querySelectorAll('.col-lg-4');
+            const totalItems = cards.length;
+            const maxIndex = Math.max(0, totalItems - itemsPerView);
+
+            function updateCarousel() {
+                const percentage = -(carouselIndex * (100 / itemsPerView));
+                track.style.transform = `translateX(${percentage}%)`;
+                prevBtn.disabled = carouselIndex === 0;
+                nextBtn.disabled = carouselIndex >= maxIndex;
+            }
+
+            prevBtn.addEventListener('click', () => {
+                if (carouselIndex > 0) {
+                    carouselIndex--;
+                    updateCarousel();
+                }
+            });
+
+            nextBtn.addEventListener('click', () => {
+                if (carouselIndex < maxIndex) {
+                    carouselIndex++;
+                    updateCarousel();
+                }
+            });
+
+            updateCarousel();
         }
         
         function ordenarProductos(productos) {
@@ -330,14 +413,19 @@ $usuario = $_SESSION['usuario'];
             }
         }
         
-        function generarCardProducto(producto) {
+        function generarCardProducto(producto, showPromoName = false) {
             const stock = parseInt(producto.stock) || 0;
             const agotado = stock <= 0;
             const tienePromocion = producto.tiene_promocion && producto.porcentaje_descuento > 0;
 
-            // Badge flotante con animación
+            // Badge flotante con animación (descuento)
             const badgePromo = tienePromocion 
                 ? `<div class="promo-badge-floating">-${parseFloat(producto.porcentaje_descuento).toFixed(0)}%</div>` 
+                : '';
+
+            // Badge con nombre de promoción (solo si showPromoName es true)
+            const badgeNombrePromo = (showPromoName && tienePromocion && producto.nombre_promocion)
+                ? `<div class="promo-name-badge" title="${producto.nombre_promocion}"><i class="fas fa-tag"></i> ${producto.nombre_promocion}</div>`
                 : '';
 
             let precioHTML;
@@ -389,6 +477,7 @@ $usuario = $_SESSION['usuario'];
                     <div class="card product-card h-100 ${agotado ? 'opacity-75' : ''}">
                         <div class="position-relative">
                             ${badgePromo}
+                            ${badgeNombrePromo}
                             <img src="${imagenUrl}" class="card-img-top product-img ${agotado ? 'filter-grayscale' : ''}" 
                                  alt="${producto.nombre}"
                                  onerror="this.src='../../img/placeholder.svg'"
