@@ -25,7 +25,7 @@
 
 ## 1. PROBLEMA
 
-Las tiendas de calzado tradicionales en Ecuador enfrentan desafíos significativos en la gestión de inventarios, ventas y atención al cliente, lo que resulta en pérdidas económicas y baja satisfacción del consumidor. La falta de sistemas digitalizados impide el control eficiente del stock, generando problemas de sobrecompra o desabastecimiento de productos. Los procesos manuales de registro de ventas consumen tiempo valioso y son propensos a errores humanos en la facturación. La ausencia de un catálogo en línea limita el alcance de mercado y la capacidad de los clientes para explorar productos según sus necesidades específicas (género, tipo, talla). Finalmente, la gestión de promociones y descuentos se vuelve compleja sin un sistema automatizado que permita aplicar y controlar estas ofertas de manera efectiva.
+Las tiendas de calzado tradicionales en Ecuador enfrentan desafíos significativos en la gestión de inventarios, ventas y atención al cliente, lo que resulta en pérdidas económicas y baja satisfacción del consumidor. La falta de sistemas digitalizados impide el control eficiente del stock, generando problemas de sobrecompra o desabastecimiento de productos. Los procesos manuales de registro de ventas consumen tiempo valioso y son propensos a errores humanos en la facturación. La ausencia de un catálogo en línea limita el alcance de mercado y la capacidad de los clientes para explorar productos según sus necesidades específicas (género, tipo, talla). **Asimismo, la carencia de información geográfica estructurada (provincia/ciudad) dificulta la logística de envíos y el análisis demográfico del mercado.** Finalmente, la gestión de promociones y descuentos se vuelve compleja sin un sistema automatizado que permita aplicar y controlar estas ofertas de manera efectiva.
 
 ## 2. JUSTIFICACIÓN
 
@@ -42,10 +42,10 @@ Desarrollar una aplicación web con arquitectura Modelo-Vista-Controlador para l
 1. Implementar un módulo de gestión de marcas y productos con clasificación por género y tipo
 2. Desarrollar un sistema de control de inventario con validación de stock en tiempo real
 3. Crear un sistema de autenticación seguro con roles definidos (Admin/Cliente)
-4. Integrar validaciones de datos locales, incluyendo algoritmo de cédula ecuatoriana
+4. Integrar validaciones de datos locales, incluyendo algoritmo de cédula ecuatoriana y recolección de ubicación geográfica (Provincia/Ciudad)
 5. Diseñar un sistema de promociones flexible que permita descuentos por marca, categoría o género
 6. Implementar un carrito de compras interactivo con persistencia y cálculo automático de totales
-7. Crear una interfaz de usuario intuitiva y responsiva con sección de ayuda interactiva
+7. Crear una interfaz de usuario intuitiva y responsiva con sección de ayuda y gestión de perfil personalizada
 
 ## 4. METODOLOGÍA
 
@@ -157,7 +157,7 @@ Se realizaron pruebas exhaustivas:
 
 2. **Sistema de Inventario Automatizado:** Control de stock en tiempo real, actualización automática con ventas, alertas de stock bajo y prevención de sobreventa
 
-3. **Validación de Datos Ecuatorianos:** Validador de cédulas que verifica formato, códigos provinciales y dígito verificador, funcionando en frontend y backend
+3. **Validación de Datos y Localización:** Validador de cédulas ecuatorianas y sistema de selección obligatoria de Provincia/Ciudad con dropdowns dinámicos para una gestión logística precisa.
 
 4. **Sistemas de Promociones Avanzadas:** Módulo completo de descuentos segmentados por marca, género o tipo, con validación en tiempo real y contador de productos afectados.
 
@@ -165,7 +165,7 @@ Se realizaron pruebas exhaustivas:
 
 6. **Centro de Reportes Avanzado:** Implementación de 4 reportes estratégicos (Ventas, Productos, Inventario, Clientes) con capacidad de exportación a PDF, permitiendo una gestión basada en datos.
 
-7. **Autogestión de Perfil:** Los clientes cuentan con un espacio para visualizar y actualizar sus datos de contacto de forma segura.
+7. **Autogestión de Perfil:** Los clientes cuentan con un espacio para visualizar y actualizar sus datos de contacto (teléfono, celular, ubicación y dirección) de forma segura.
 
 ## 6. CONCLUSIONES
 

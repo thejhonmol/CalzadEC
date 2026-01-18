@@ -166,10 +166,10 @@ Haz commit y push de los cambios.
 
 ### 5.2 Probar Login
 
-| Rol | Email | Contraseña |
-|-----|-------|------------|
-| Admin | `admin@tiendacalzado.com` | `admin123` |
-| Cliente | `juan.perez@email.com` | `cliente123` |
+| Rol | Email | Contraseña | Provincia/Ciudad |
+|-----|-------|------------|------------------|
+| Admin | `admin@tiendacalzado.com` | `admin123` | Chimborazo/Riobamba |
+| Cliente | `juan.perez@email.com` | `cliente123` | Chimborazo/Riobamba |
 
 ### 5.3 Probar Subida de Imágenes
 
@@ -205,9 +205,10 @@ Haz commit y push de los cambios.
 |---------|-------------|
 | `Dockerfile` | Configuración del contenedor para Railway |
 | `config/conexion.php` | Conexión a BD con soporte para variables de entorno |
-| `database/schema_railway.sql` | Schema adaptado para Railway (sin CREATE DATABASE) |
+| `database/schema_railway.sql` | Schema adaptado para Railway (con Provincia/Ciudad) |
+| `js/ecuador-locations.js` | Base de datos de localizaciones y lógica de dropdowns |
 | `vista/admin/reportes.php` | Centro de reportes con exportación PDF |
-| `vista/cliente/perfil.php` | Gestión de perfil de usuario final |
+| `vista/cliente/perfil.php` | Gestión de perfil (Teléfono, Dirección, Ubicación) |
 
 ---
 

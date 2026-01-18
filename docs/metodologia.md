@@ -20,7 +20,7 @@ Para el desarrollo de esta aplicación web se ha seleccionado una **metodología
 - Clasificación de productos por tipo: Deportivos, No Deportivos
 - Control de stock con actualización automática
 - Sistema de promociones y descuentos
-- Validación de datos de clientes (cédula ecuatoriana, email, teléfono)
+- Validación de datos de clientes (cédula ecuatoriana, email, teléfono, provincia/ciudad)
 - Sistema de autenticación y autorización por roles
 - Carrito de compras para clientes
 - Generación automática de facturas/recibos
@@ -129,6 +129,7 @@ Se desarrollarán mockups para las siguientes interfaces:
   - Validación de cédula ecuatoriana
   - Gestión de carrito
   - Filtros dinámicos de productos
+  - Selector dinámico de Provincias y Ciudades de Ecuador
   - Integración jsPDF para reportes
 
 ### 4. Pruebas

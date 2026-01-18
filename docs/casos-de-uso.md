@@ -66,7 +66,7 @@
 **Flujo Principal (Registro):**
 1. El usuario accede a la página de registro
 2. Completa el formulario con sus datos personales
-3. El sistema valida la cédula ecuatoriana
+3. El sistema valida la cédula ecuatoriana y requiere la selección de Provincia y Ciudad (Ecuador).
 4. El sistema verifica que el email no esté registrado
 5. Crea la cuenta y envía confirmación
 6. Redirige al usuario al catálogo
@@ -193,14 +193,14 @@
 ## Caso de Uso 8: Gestión de Perfil de Usuario
 
 **Actor:** Cliente  
-**Descripción:** El cliente puede visualizar sus datos y editar su información de contacto (teléfono y dirección).
+**Descripción:** El cliente puede visualizar sus datos y editar su información de contacto (teléfono, ubicación geográfica y dirección).
 
 **Flujo Principal:**
 1. El cliente inicia sesión
 2. Accede a la sección "Mi Perfil"
 3. Visualiza sus datos informativos (Cédula, correo, nombre)
 4. Selecciona "Editar Datos"
-5. Modifica su número de celular o dirección
+5. Modifica su número de celular, provincia, ciudad o dirección
 6. El sistema valida el formato de los datos
 7. Guarda los cambios
 8. El sistema actualiza la sesión y muestra confirmación

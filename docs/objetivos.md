@@ -12,7 +12,7 @@ Desarrollar una aplicación web con arquitectura Modelo-Vista-Controlador para l
 
 3. **Crear un sistema de autenticación y autorización** que diferencie entre usuarios administradores y clientes, controlando el acceso a funcionalidades según el rol.
 
-4. **Implementar validaciones específicas para datos ecuatorianos**, incluyendo la validación de cédulas de identidad (10 dígitos con código provincial) para asegurar la integridad de la información.
+4. **Implementar validaciones y recolección de datos geográficos**, incluyendo la validación de cédulas de identidad y la selección obligatoria de provincia y ciudad para mejorar la logística de entregas.
 
 5. **Diseñar un sistema de promociones avanzado** que permita aplicar descuentos segmentados por marca, género o tipo de calzado, con cálculo automático en tiempo real.
 
@@ -24,6 +24,6 @@ Desarrollar una aplicación web con arquitectura Modelo-Vista-Controlador para l
 
 9. **Desarrollar un sistema de reportes administrativos** que permitan visualizar estadísticas dinámicas y exportar documentos en formato PDF para el análisis del negocio.
 
-10. **Implementar un centro de autogestión de perfil** para clientes, permitiendo la actualización segura de sus datos de contacto y dirección.
+10. **Implementar un centro de autogestión de perfil** para clientes, permitiendo la actualización segura de sus datos de contacto, ubicación (provincia/ciudad) y dirección.
 
 11. **Preparar la aplicación para despliegue en servidor web**, asegurando la correcta configuración de la base de datos y archivos necesarios para su funcionamiento en producción.
