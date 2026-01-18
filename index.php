@@ -94,6 +94,18 @@
         </div>
     </section>
 
+    <!-- Ofertas Destacadas Section -->
+    <section id="ofertas-destacadas" class="py-5 d-none">
+        <div class="container">
+            <h2 class="promo-section-title">
+                <i class="fas fa-fire"></i> Ofertas Destacadas
+            </h2>
+            <div id="productos-ofertas" class="row">
+                <!-- Product cards will be inserted here -->
+            </div>
+        </div>
+    </section>
+
     <!-- Filtros -->
     <section class="py-4 bg-light">
         <div class="container">
@@ -337,6 +349,9 @@
                         if (promocionesActivas.length > 1) {
                             intervaloPromocion = setInterval(rotarPromocion, 5000);
                         }
+
+                        // Cargar productos con ofertas
+                        cargarProductosOfertas();
                     }
                 })
                 .catch(error => console.error('Error al cargar promociones:', error));
@@ -359,6 +374,24 @@
         function rotarPromocion() {
             indicePromocionActual = (indicePromocionActual + 1) % promocionesActivas.length;
             mostrarPromocion(indicePromocionActual);
+        }
+
+        // Cargar productos con promociones activas
+        function cargarProductosOfertas() {
+            fetch('controlador/ProductoController.php?accion=filtrar&ofertas=1')
+                .then(response => response.json())
+                .then(data => {
+                    const contenedor = document.getElementById('productos-ofertas');
+                    
+                    if (data.productos && data.productos.length > 0) {
+                        contenedor.innerHTML = '';
+                        data.productos.forEach(producto => {
+                            contenedor.innerHTML += generarCardProducto(producto, true);
+                        });
+                        document.getElementById('ofertas-destacadas').classList.remove('d-none');
+                    }
+                })
+                .catch(error => console.error('Error al cargar productos en oferta:', error));
         }
         
         function ordenarProductos(productos) {
@@ -446,14 +479,19 @@
             }
         }
         
-        function generarCardProducto(producto) {
+        function generarCardProducto(producto, showPromoName = false) {
             const stock = parseInt(producto.stock) || 0;
             const agotado = stock <= 0;
             const tienePromocion = producto.tiene_promocion && producto.porcentaje_descuento > 0;
 
-            // Badge flotante con animación
+            // Badge flotante con animación (descuento)
             const badgePromo = tienePromocion 
                 ? `<div class="promo-badge-floating">-${parseFloat(producto.porcentaje_descuento).toFixed(0)}%</div>` 
+                : '';
+
+            // Badge con nombre de promoción (solo si showPromoName es true)
+            const badgeNombrePromo = (showPromoName && tienePromocion && producto.nombre_promocion)
+                ? `<div class="promo-name-badge" title="${producto.nombre_promocion}"><i class="fas fa-tag"></i> ${producto.nombre_promocion}</div>`
                 : '';
 
             let precioHTML;
@@ -518,6 +556,7 @@
                     <div class="card product-card h-100 ${agotado ? 'opacity-75' : ''}">
                         <div class="position-relative">
                             ${badgePromo}
+                            ${badgeNombrePromo}
                             <img src="${imagenUrl}" class="card-img-top product-img ${agotado ? 'filter-grayscale' : ''}" 
                                  alt="${producto.nombre}"
                                  onerror="this.src='img/placeholder.svg'"
