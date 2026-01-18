@@ -160,7 +160,7 @@ class Producto {
             
             // Filtrar solo los que tienen promoción activa
             $productosConPromocion = array_filter($productos, function($p) {
-                return isset($p['tiene_promocion']) && $p['tiene_promocion'] === true && 
+                return !empty($p['tiene_promocion']) && 
                        isset($p['porcentaje_descuento']) && $p['porcentaje_descuento'] > 0;
             });
             
