@@ -70,9 +70,9 @@ class Marca {
      */
     public function obtenerPorId($id) {
         try {
-            $sql = "SELECT id_marca, nombre_marca, descripcion, fecha_creacion
+            $sql = "SELECT id_marca, nombre_marca, descripcion, fecha_creacion, estado
                     FROM marcas
-                    WHERE id_marca = :id AND estado = 'activo'";
+                    WHERE id_marca = :id";
             
             $stmt = $this->conexion->prepare($sql);
             $stmt->execute([':id' => $id]);
