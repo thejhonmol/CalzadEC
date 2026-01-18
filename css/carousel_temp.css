@@ -1,0 +1,82 @@
+/* Carousel for Promotional Products */
+.carousel-container {
+    position: relative;
+    padding: 0 50px;
+}
+
+.carousel-wrapper {
+    overflow: hidden;
+    width: 100%;
+}
+
+.carousel-track {
+    display: flex;
+    flex-wrap: nowrap !important;
+    /* Force single row */
+    gap: 1.5rem;
+    transition: transform 0.4s ease-in-out;
+}
+
+.carousel-track .col-lg-4 {
+    flex: 0 0 calc(33.333% - 1rem);
+    /* Fixed width for 3 items */
+    max-width: calc(33.333% - 1rem);
+    width: calc(33.333% - 1rem);
+    /* Explicit width */
+}
+
+.carousel-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+    color: white;
+    border: none;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.carousel-nav-btn:hover {
+    background: linear-gradient(135deg, #b91c1c 0%, #7f1d1d 100%);
+    box-shadow: 0 6px 16px rgba(220, 38, 38, 0.5);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.carousel-nav-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.carousel-prev {
+    left: 0;
+}
+
+.carousel-next {
+    right: 0;
+}
+
+/* Responsive carousel */
+@media (max-width: 992px) {
+    .carousel-track .col-lg-4 {
+        flex: 0 0 calc(50% - 0.75rem);
+        max-width: calc(50% - 0.75rem);
+        width: calc(50% - 0.75rem);
+    }
+}
+
+@media (max-width: 768px) {
+    .carousel-track .col-lg-4 {
+        flex: 0 0 100%;
+        max-width: 100%;
+        width: 100%;
+    }
+}
