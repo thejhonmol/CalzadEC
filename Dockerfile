@@ -12,5 +12,6 @@ COPY . /var/www/html/
 # Configurar permisos
 RUN chown -R www-data:www-data /var/www/html/
 
-# Exponer puerto (Railway usa variable PORT, pero 80 es el default interno)
-EXPOSE 80
+# Script de inicio para manejar el puerto dinámico de Railway
+# Reemplaza el puerto 80 por la variable $PORT en la configuración de Apache
+CMD sed -i "s/80/${PORT:-80}/g" /etc/apache2/sites-available/000-default.conf /etc/apache2/ports.conf && docker-php-entrypoint apache2-foreground
