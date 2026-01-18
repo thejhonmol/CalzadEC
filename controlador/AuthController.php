@@ -120,9 +120,8 @@ class AuthController {
         session_unset();
         session_destroy();
         
-        // Redirigir al inicio después de cerrar sesión
-        $baseUrl = dirname(dirname($_SERVER['PHP_SELF']));
-        header("Location: " . $baseUrl . "/index.php");
+        // Redirigir al inicio del proyecto usando ruta relativa
+        header("Location: ../index.php");
         exit;
     }
     
