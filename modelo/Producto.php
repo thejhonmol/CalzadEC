@@ -84,13 +84,25 @@ class Producto {
      */
     public function obtenerPorId($id) {
         try {
-            $sql = "SELECT p.*, m.nombre_marca, pr.nombre AS nombre_promocion, pr.porcentaje_descuento,
+            $sql = "SELECT p.*, m.nombre_marca, 
+                           pr.nombre AS nombre_promocion, 
+                           pr.porcentaje_descuento,
+                           p.precio AS precio_original,
+                           CASE 
+                               WHEN pr.id_promocion IS NOT NULL THEN 1 
+                               ELSE 0 
+                           END AS tiene_promocion,
                            ROUND(p.precio - (p.precio * IFNULL(pr.porcentaje_descuento, 0) / 100), 2) AS precio_final
                     FROM productos p
                     LEFT JOIN marcas m ON p.id_marca = m.id_marca
-                    LEFT JOIN promociones pr ON p.promocion_id = pr.id_promocion 
-                        AND pr.activa = TRUE 
+                    LEFT JOIN promociones pr ON pr.activa = TRUE 
                         AND CURRENT_DATE BETWEEN pr.fecha_inicio AND pr.fecha_fin
+                        AND (
+                            pr.tipo_aplicacion = 'todos' OR
+                            (pr.tipo_aplicacion = 'marca' AND pr.id_marca = p.id_marca) OR
+                            (pr.tipo_aplicacion = 'genero' AND pr.genero = p.genero) OR
+                            (pr.tipo_aplicacion = 'tipo' AND pr.tipo = p.tipo)
+                        )
                     WHERE p.id_producto = :id";
             
             $stmt = $this->conexion->prepare($sql);
@@ -113,13 +125,25 @@ class Producto {
      */
     public function obtenerPorCategoria($genero = null, $tipo = null, $marca = null) {
         try {
-            $sql = "SELECT p.*, m.nombre_marca, pr.nombre AS nombre_promocion, pr.porcentaje_descuento,
+            $sql = "SELECT p.*, m.nombre_marca, 
+                           pr.nombre AS nombre_promocion, 
+                           pr.porcentaje_descuento,
+                           p.precio AS precio_original,
+                           CASE 
+                               WHEN pr.id_promocion IS NOT NULL THEN 1 
+                               ELSE 0 
+                           END AS tiene_promocion,
                            ROUND(p.precio - (p.precio * IFNULL(pr.porcentaje_descuento, 0) / 100), 2) AS precio_final
                     FROM productos p
                     LEFT JOIN marcas m ON p.id_marca = m.id_marca
-                    LEFT JOIN promociones pr ON p.promocion_id = pr.id_promocion 
-                        AND pr.activa = TRUE 
+                    LEFT JOIN promociones pr ON pr.activa = TRUE 
                         AND CURRENT_DATE BETWEEN pr.fecha_inicio AND pr.fecha_fin
+                        AND (
+                            pr.tipo_aplicacion = 'todos' OR
+                            (pr.tipo_aplicacion = 'marca' AND pr.id_marca = p.id_marca) OR
+                            (pr.tipo_aplicacion = 'genero' AND pr.genero = p.genero) OR
+                            (pr.tipo_aplicacion = 'tipo' AND pr.tipo = p.tipo)
+                        )
                     WHERE p.estado = 'activo'";
             
             $params = [];
