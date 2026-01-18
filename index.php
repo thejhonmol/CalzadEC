@@ -52,12 +52,12 @@
                     </li>
                     <?php else: ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?php echo $_SESSION['usuario']['rol'] === 'admin' ? 'vista/admin/dashboard.php' : 'controlador/UsuarioController.php?accion=perfil'; ?>">
+                        <a class="nav-link" href="<?php echo $_SESSION['usuario']['rol'] === 'admin' ? 'vista/admin/dashboard.php' : 'vista/cliente/mis-compras.php'; ?>">
                             <i class="fas fa-user"></i> Mi Perfil
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="controlador/UsuarioController.php?accion=logout"><i class="fas fa-sign-out-alt"></i> Salir</a>
+                        <a class="nav-link" href="controlador/AuthController.php?accion=logout"><i class="fas fa-sign-out-alt"></i> Salir</a>
                     </li>
                     <?php endif; ?>
                     <?php if(!isset($_SESSION['usuario']) || $_SESSION['usuario']['rol'] !== 'admin'): ?>
@@ -420,21 +420,6 @@
                 imagenUrl = 'img/' + imagenUrl;
             }
             
-            return `
-                <div class="col-lg-4 col-md-6 mb-4">
-                    <div class="card product-card h-100">
-                        <img src="${imagenUrl}" class="card-img-top product-img" 
-                             alt="${producto.nombre}"
-                             onerror="this.src='img/placeholder.svg'">
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title">${producto.nombre}</h5>
-                            <div class="mb-2">
-                                <span class="badge bg-primary me-1">${producto.genero}</span>
-                                <span class="badge bg-secondary">${producto.tipo === 'deportivo' ? 'Deportivo' : 'No Deportivo'}</span>
-                                ${stockHTML}
-                            </div>
-                            <p class="text-muted mb-2"><i class="fas fa-ruler"></i> Talla: ${producto.talla}</p>
-                            ${precioHTML}
             let botonHTML;
             if (window.usuarioRol === 'admin') {
                 botonHTML = `<button class="btn btn-secondary mt-auto" disabled title="Administradores no pueden comprar">
