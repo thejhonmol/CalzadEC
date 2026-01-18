@@ -232,15 +232,23 @@ if (!$idVenta) {
                 </div>
                 
                 <div class="row justify-content-end">
-                    <div class="col-md-5">
+                    <div class="col-md-6">
                         <div class="totales-section">
                             <div class="d-flex justify-content-between mb-2">
-                                <span>Subtotal:</span>
-                                <span>$${parseFloat(factura.subtotal).toFixed(2)}</span>
+                                <span>DESCUENTO APLICADO:</span>
+                                <span>$${parseFloat(factura.descuento).toFixed(2)}</span>
                             </div>
-                            <div class="d-flex justify-content-between mb-2 text-success">
-                                <span>Descuento:</span>
-                                <span>-$${parseFloat(factura.descuento).toFixed(2)}</span>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>SUBTOTAL 0%:</span>
+                                <span>$0.00</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>SUBTOTAL SIN IMPUESTOS:</span>
+                                <span>$${(parseFloat(factura.total) / 1.15).toFixed(2)}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>15% IVA:</span>
+                                <span>$${(parseFloat(factura.total) - (parseFloat(factura.total) / 1.15)).toFixed(2)}</span>
                             </div>
                             <hr>
                             <div class="d-flex justify-content-between">
