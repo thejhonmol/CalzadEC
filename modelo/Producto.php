@@ -245,11 +245,12 @@ class Producto {
      */
     public function reducirStock($id, $cantidad) {
         try {
-            $sql = "UPDATE productos SET stock = stock - :cantidad WHERE id_producto = :id AND stock >= :cantidad";
+            $sql = "UPDATE productos SET stock = stock - :cantidad WHERE id_producto = :id AND stock >= :cantidad_check";
             $stmt = $this->conexion->prepare($sql);
             return $stmt->execute([
                 ':id' => $id,
-                ':cantidad' => $cantidad
+                ':cantidad' => $cantidad,
+                ':cantidad_check' => $cantidad
             ]);
             
         } catch (PDOException $e) {
